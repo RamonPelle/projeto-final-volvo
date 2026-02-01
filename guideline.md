@@ -106,7 +106,7 @@ TN:
 ---
 
 ## Swagger
-- Adicionar XML comments em controllers e models para descrever:
+- Adicionar documentação nos arquivos para descrever:
 	- Sumário, parâmetros, possíveis respostas (2xx, 4xx, 5xx).
 	- Exemplos de request/response.
 - Manter consistência de nomes e descrições; atualizar ao modificar endpoints.
@@ -121,4 +121,4 @@ TN:
 - GitHub Projects – usar labels customizadas.
 - Internacionalização (i18n) – baixa prioridade.
 
-```Durante a preparação deste arquivo, os autores usaram GitHub Copilot, no modo Agent GPT-5 para formatar em markdown e sugerir seções para o texto. Após usar essa ferramenta, os autores revisaram e editaram o conteúdo conforme necessário e assumem total responsabilidade pelo conteúdo.```
+```Durante a preparação deste arquivo, os autores usaram GitHub Copilot, no modo Agent GPT-5 para formatar em markdown e sugerir alterações gramaticais no texto. Após usar essa ferramenta, os autores revisaram e editaram o conteúdo conforme necessário e assumem total responsabilidade pelo conteúdo.```
