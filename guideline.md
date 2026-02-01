@@ -115,7 +115,6 @@ TN:
 
 ## Ideias / Backlog
 - Testes unitários – Secundário.
-- Sem frontend (API-first).
 - Implementar fluxo de venda; considerar requisitos das outras opções.
 - Colocar explicações detalhadas no Swagger (exemplos, responses, erros).
 - GitHub Projects – usar labels customizadas.
