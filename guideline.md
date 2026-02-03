@@ -120,15 +120,4 @@ TN:
 - GitHub Projects – usar labels customizadas.
 - Internacionalização (i18n) – baixa prioridade.
 
----
-
-## Decisões de Projeto
-### Ferramenta para confecção de diagramas
-Foram comparadas duas ferramentas para a confecção de diagramas para este projeto: BrModelo e Mermaid JS.
-
-Optou-se pelo uso do Mermaid JS, devido a:
-- Praticidade/ rapidez para confecção de diagramas,
-- Maior variabilidade de modelos que podem ser confeccionados com o uso da ferramenta, uma vez que serão produzidos outros tipos no decorrer do projeto, e padronização é um fator relevante.
-- Visualizar alterações facilmente pelo Git.
-
 ```Durante a preparação deste arquivo, os autores usaram GitHub Copilot, no modo Agent GPT-5 para formatar em markdown e sugerir alterações gramaticais no texto. Após usar essa ferramenta, os autores revisaram e editaram o conteúdo conforme necessário e assumem total responsabilidade pelo conteúdo.```
