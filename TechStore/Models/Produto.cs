@@ -10,15 +10,22 @@ public partial class Produto
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     [Required]
-    public string Nome { get; set; } = null;
+    [MaxLength(100)]
+    public string Nome { get; set; } = null!;
 
+    [Column(TypeName = "decimal(8,2)")] // Define max 999.999,99
     public decimal Preco { get; set; }
-    public string Descricao { get; set; } = null;
+
+    [MaxLength(400)]
+    public string Descricao { get; set; } = null!;
+
+    [Required]
+    public int Estoque { get; set; }
 
     public int CategoriaId { get; set; }
 
     [ForeignKey("CategoriaId")]
-    public Categoria categoria { get; set; } = null;
+    public Categoria categoria { get; set; } = null!;
 
 
 }

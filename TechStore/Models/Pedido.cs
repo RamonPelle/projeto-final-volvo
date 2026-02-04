@@ -4,15 +4,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 using TechStore.Models;
 namespace TechStore.Models;
 
-public partial class Categoria
+public partial class Pedido
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required]
-    [MaxLength(30)]
-    public string Nome { get; set; } = null!;
-    public List<Produto> Produtos { get; set; } = new List<Produto>();
+    public DateTime Data { get; set; }
+
+    public int ClienteId { get; set; }
+
+    [ForeignKey("ClienteId")]
+    public Cliente cliente { get; set; } = null!;
 
 }
