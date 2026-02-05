@@ -1,9 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using TechStore.Data;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<TechStoreContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
