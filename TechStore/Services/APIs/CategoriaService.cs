@@ -7,7 +7,6 @@ using TechStore.Utils;
 
 namespace TechStore.Services.api
 {
-
     public class CategoriaService
     {
         private readonly CategoriaRepository _categoriaRepository;
@@ -20,6 +19,11 @@ namespace TechStore.Services.api
         public async Task<List<Categoria>> ObterTodasCategorias()
         {
             return await _categoriaRepository.BuscarTodos();
+        }
+
+        public async Task<Categoria> BuscarCategoriaPorId(int id)
+        {
+            return await _categoriaRepository.BuscarPorId(id);
         }
 
         public async Task<Categoria> AdicionarCategoria(CategoriaDTO categoriaDto)
@@ -36,7 +40,7 @@ namespace TechStore.Services.api
 
             var erros = ValidadorEntidade.Validar(categoria);
 
-            if (erros.Any()) 
+            if (erros.Any())
             {
                 throw new ValidationException(string.Join("; ", erros));
             }

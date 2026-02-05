@@ -25,15 +25,26 @@ namespace TechStore.Controllers.api
             return Ok(categorias);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Categoria>> GetCategoriaPorId(int id)
+        {
+            var categoria = await _categoriaService.BuscarCategoriaPorId(id);
+
+            if (categoria == null)
+                return NotFound();
+
+            return Ok(categoria);
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostCategoria([FromBody] CategoriaDTO categoriaDto)
         {
             if (!ModelState.IsValid)
             {
-              var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
-              return BadRequest(errorMessages);
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
+                return BadRequest(errorMessages);
             }
-            
+
             try
             {
                 var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaDto);
