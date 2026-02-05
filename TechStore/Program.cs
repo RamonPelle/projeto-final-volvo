@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using Microsoft.Extensions.DependencyInjection;
+using TechStore.Services.api;
+using TechStore.Repository.api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<CategoriaRepository>();
+builder.Services.AddScoped<CategoriaService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TechStoreContext>(options =>
