@@ -1,6 +1,9 @@
+
+using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
 using TechStore.DTOs;
+using TechStore.Utils;
 
 namespace TechStore.Services.api
 {
@@ -30,6 +33,13 @@ namespace TechStore.Services.api
             {
                 Nome = categoriaDto.Nome
             };
+
+            var erros = ValidadorEntidade.Validar(categoria);
+
+            if (erros.Any()) 
+            {
+                throw new ValidationException(string.Join("; ", erros));
+            }
 
             await _categoriaRepository.Adicionar(categoria);
             return categoria;

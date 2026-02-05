@@ -28,6 +28,12 @@ namespace TechStore.Controllers.api
         [HttpPost]
         public async Task<ActionResult> PostCategoria([FromBody] CategoriaDTO categoriaDto)
         {
+            if (!ModelState.IsValid)
+            {
+              var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
+              return BadRequest(errorMessages);
+            }
+            
             try
             {
                 var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaDto);
