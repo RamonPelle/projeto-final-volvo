@@ -35,5 +35,10 @@ namespace TechStore.Repository.api
             return categoria;
         }
 
+        public async Task EditarCategoria(Categoria categoria)
+        {
+            _context.Categorias.Update(categoria);
+            await _context.SaveChangesAsync();
+        }
     }
 }

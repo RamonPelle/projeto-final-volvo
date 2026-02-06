@@ -52,5 +52,22 @@ namespace TechStore.Services.api
             await _categoriaRepository.Adicionar(categoria);
             return categoria;
         }
+
+        public async Task EditarCategoria(int id, CategoriaDTO dto)
+        {
+            var categoria = await _categoriaRepository.BuscarPorId(id);
+
+            if (categoria == null)
+                throw new KeyNotFoundException();
+
+            categoria.Nome = dto.Nome;
+
+            var erros = ValidadorEntidade.Validar(categoria);
+            if (erros.Any())
+                throw new ValidationException(string.Join("; ", erros));
+
+            await _categoriaRepository.EditarCategoria(categoria);
+        }
+
     }
 }

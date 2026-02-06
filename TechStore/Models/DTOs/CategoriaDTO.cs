@@ -8,7 +8,5 @@ namespace TechStore.DTOs
         [Required(ErrorMessage = "O nome da categoria é obrigatório.")]
         [MaxLength(30)]
         public string Nome { get; set; } = null!;
-
-        public List<Produto> Produtos { get; set; } = new List<Produto>();
     }
 }

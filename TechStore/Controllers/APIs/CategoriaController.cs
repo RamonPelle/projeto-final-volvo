@@ -73,5 +73,30 @@ namespace TechStore.Controllers.api
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditarCategoria(int id, [FromBody] CategoriaDTO categoriaDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
+                return BadRequest(errorMessages);
+            }
+
+            try
+            {
+                await _categoriaService.EditarCategoria(id, categoriaDto);
+                return NoContent(); 
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
