@@ -22,17 +22,9 @@ namespace TechStore.Repository.api
             return await _context.Categorias.FindAsync(id);
         }
 
-        public async Task<Categoria?> DeletarCategoria(int id)
+        public async Task DeletarCategoria(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
-
-            if (categoria == null)
-                return null;
-
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
-
-            return categoria;
+            await _context.Categorias.Where(c => c.Id == id).ExecuteDeleteAsync();
         }
 
         public async Task EditarCategoria(Categoria categoria)
