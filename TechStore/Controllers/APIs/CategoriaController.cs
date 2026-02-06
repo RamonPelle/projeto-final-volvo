@@ -36,6 +36,24 @@ namespace TechStore.Controllers.api
             return Ok(categoria);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarCategoria(int id)
+        {
+            try
+            {
+                await _categoriaService.DeletarCategoria(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostCategoria([FromBody] CategoriaDTO categoriaDto)
         {

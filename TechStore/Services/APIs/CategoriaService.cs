@@ -1,4 +1,3 @@
-
 using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
@@ -21,9 +20,14 @@ namespace TechStore.Services.api
             return await _categoriaRepository.BuscarTodos();
         }
 
-        public async Task<Categoria> BuscarCategoriaPorId(int id)
+        public async Task<Categoria?> BuscarCategoriaPorId(int id)
         {
             return await _categoriaRepository.BuscarPorId(id);
+        }
+
+        public async Task DeletarCategoria(int id)
+        {
+            await _categoriaRepository.DeletarCategoria(id);
         }
 
         public async Task<Categoria> AdicionarCategoria(CategoriaDTO categoriaDto)

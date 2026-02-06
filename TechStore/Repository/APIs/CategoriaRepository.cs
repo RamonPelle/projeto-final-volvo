@@ -21,5 +21,19 @@ namespace TechStore.Repository.api
         {
             return await _context.Categorias.FindAsync(id);
         }
+
+        public async Task<Categoria?> DeletarCategoria(int id)
+        {
+            var categoria = await _context.Categorias.FindAsync(id);
+
+            if (categoria == null)
+                return null;
+
+            _context.Categorias.Remove(categoria);
+            await _context.SaveChangesAsync();
+
+            return categoria;
+        }
+
     }
 }
