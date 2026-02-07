@@ -23,5 +23,10 @@ namespace TechStore.Services.api
         {
             return await _produtoRepository.BuscarPorId(id);
         }
+
+        public async Task DeletarProduto(int id)
+        {
+            await _produtoRepository.DeletarProduto(id);
+        }
     }
 }

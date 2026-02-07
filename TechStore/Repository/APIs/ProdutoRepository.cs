@@ -15,5 +15,10 @@ namespace TechStore.Repository.api
         {
             return await _context.Produtos.FindAsync(id);
         }
+
+        public async Task DeletarProduto(int id)
+        {
+            await _context.Produtos.Where(p => p.Id == id).ExecuteDeleteAsync();
+        }
     }
 }

@@ -35,7 +35,22 @@ namespace TechStore.Controllers.api
             return Ok(produto);
         }
 
-
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarProduto(int id)
+        {
+            try
+            {
+                await _produtoService.DeletarProduto(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
-
 }
