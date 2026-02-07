@@ -24,6 +24,17 @@ namespace TechStore.Controllers.api
             return Ok(produtos);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Produto>> GetProdutoPorId(int id)
+        {
+            var produto = await _produtoService.BuscarProdutoPorId(id);
+
+            if (produto == null)
+                return NotFound();
+
+            return Ok(produto);
+        }
+
 
     }
 

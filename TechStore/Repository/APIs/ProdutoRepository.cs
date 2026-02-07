@@ -10,7 +10,10 @@ namespace TechStore.Repository.api
 
         public async Task<List<Produto>> BuscarTodos()
             => await _context.Produtos.ToListAsync();
-    }
 
-    
+        public async Task<Produto?> BuscarPorId(int id)
+        {
+            return await _context.Produtos.FindAsync(id);
+        }
+    }
 }

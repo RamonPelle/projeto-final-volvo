@@ -18,5 +18,10 @@ namespace TechStore.Services.api
         {
             return await _produtoRepository.BuscarTodos();
         }
+
+        public async Task<Produto?> BuscarProdutoPorId(int id)
+        {
+            return await _produtoRepository.BuscarPorId(id);
+        }
     }
 }
