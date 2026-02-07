@@ -39,7 +39,7 @@ namespace TechStore.Services.api
             {
                 Nome = produtoDto.Nome,
                 Preco = produtoDto.Preco,
-                Descricao = produtoDto.Descricao, 
+                Descricao = produtoDto.Descricao,
                 Estoque = produtoDto.Estoque,
                 CategoriaId = produtoDto.CategoriaId
             };
@@ -51,6 +51,22 @@ namespace TechStore.Services.api
 
             await _produtoRepository.Adicionar(produto);
             return produto;
+        }
+
+        public async Task EditarProduto(int id, ProdutoDTO dto)
+        {
+            var produto = await _produtoRepository.BuscarPorId(id);
+
+            if (produto == null)
+                throw new KeyNotFoundException();
+
+            produto.Nome = dto.Nome;
+
+            var erros = ValidadorEntidade.Validar(produto);
+            if (erros.Any())
+                throw new ValidationException(string.Join("; ", erros));
+
+            await _produtoRepository.EditarProduto(produto);
         }
     }
 }

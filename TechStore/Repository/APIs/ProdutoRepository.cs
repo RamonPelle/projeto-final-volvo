@@ -26,5 +26,11 @@ namespace TechStore.Repository.api
             await _context.Produtos.AddAsync(produto);
             await _context.SaveChangesAsync();
         }
+
+        public async Task EditarProduto(Produto produto)
+        {
+            _context.Produtos.Update(produto);
+            await _context.SaveChangesAsync();
+        }
     }
 }
