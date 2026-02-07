@@ -14,6 +14,8 @@ builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<ProdutoService>();
+builder.Services.AddScoped<PedidoRepository>();
+builder.Services.AddScoped<PedidoService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TechStoreContext>(options =>
