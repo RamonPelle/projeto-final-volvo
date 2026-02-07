@@ -52,5 +52,25 @@ namespace TechStore.Controllers.api
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult> PostProduto([FromBody] ProdutoDTO produtoDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
+                return BadRequest(errorMessages);
+            }
+
+            try
+            {
+                var novoProduto = await _produtoService.AdicionarProduto(produtoDto);
+                return CreatedAtAction(nameof(GetProdutos), new { id = novoProduto.Id }, novoProduto);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

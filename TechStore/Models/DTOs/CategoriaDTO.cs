@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using TechStore.Models;
 
 namespace TechStore.DTOs
 {

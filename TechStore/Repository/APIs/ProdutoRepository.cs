@@ -20,5 +20,11 @@ namespace TechStore.Repository.api
         {
             await _context.Produtos.Where(p => p.Id == id).ExecuteDeleteAsync();
         }
+
+        public async Task Adicionar(Produto produto)
+        {
+            await _context.Produtos.AddAsync(produto);
+            await _context.SaveChangesAsync();
+        }
     }
 }
