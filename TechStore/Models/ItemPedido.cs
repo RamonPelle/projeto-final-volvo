@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using TechStore.Models;
 namespace TechStore.Models
 {
 
@@ -18,11 +17,10 @@ namespace TechStore.Models
         [Required]
         public decimal PrecoUnitario { get; set; }
 
-        [ForeignKey("PedidoId")]
         public int PedidoId { get; set; }
+        public Pedido Pedido { get; set; } = null!;
 
-        [ForeignKey("ProdutoId")]
         public int ProdutoId { get; set; }
-
+        public Produto Produto { get; set; } = null!;
     }
 }
