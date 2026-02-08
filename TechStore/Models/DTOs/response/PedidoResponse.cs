@@ -2,7 +2,7 @@ namespace TechStore.DTOs
 {
     public class PedidoResponse
     {
-        public int Id;
+        public int Id { get; set; }
         public List<ItensResponse> Itens { get; set; } = new();
 
         public class ItensResponse

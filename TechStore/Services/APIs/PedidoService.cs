@@ -29,12 +29,9 @@ namespace TechStore.Services.api
                 ?? throw new ArgumentNullException(nameof(produtoRepository));
         }
 
-        public async Task<List<Pedido>> ObterPedidosPorCliente(int clienteId)
+        public async Task<List<Pedido>> ObterPedidos(int? clienteId, StatusPedido? status)
         {
-            if (clienteId <= 0)
-                throw new ArgumentException("Id do cliente inválido.");
-
-            return await _pedidoRepository.BuscarPorClienteId(clienteId);
+            return await _pedidoRepository.Buscar(clienteId, status);
         }
 
         public async Task<Pedido?> BuscarPedidoPorId(int id)
@@ -42,25 +39,11 @@ namespace TechStore.Services.api
             return await _pedidoRepository.BuscarPorId(id);
         }
 
-        public async Task<(Pedido pedido, bool criado)> CriarOuObterPedido(
-            int clienteId,
-            PedidoDTO dto
-        )
+        public async Task<Pedido> CriarPedido(PedidoDTO dto)
         {
-            var pedidoAtivo =
-                await _pedidoRepository.ObterPedidoAtivoPorCliente(clienteId);
-
-            if (pedidoAtivo != null)
-            {
-                if (dto.Itens != null && dto.Itens.Any())
-                    await AdicionarItens(pedidoAtivo, dto.Itens);
-
-                return (pedidoAtivo, false);
-            }
-
             var novoPedido = new Pedido
             {
-                ClienteId = clienteId,
+                ClienteId = dto.ClienteId,
                 Data = DateTime.UtcNow,
                 Status = StatusPedido.Pendente
             };
@@ -70,7 +53,7 @@ namespace TechStore.Services.api
             if (dto.Itens != null && dto.Itens.Any())
                 await AdicionarItens(novoPedido, dto.Itens);
 
-            return (novoPedido, true);
+            return novoPedido;
         }
 
         private async Task AdicionarItens(

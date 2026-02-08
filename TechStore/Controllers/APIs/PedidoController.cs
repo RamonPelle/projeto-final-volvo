@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.DTOs;
+using TechStore.Models.Enums;
 
 namespace TechStore.Controllers.api
 {
@@ -17,10 +18,10 @@ namespace TechStore.Controllers.api
         }
 
         // TODO GET /api/pedido? clientId = 123 & status = pending
-        [HttpGet("cliente/{clienteId:int}")]
-        public async Task<ActionResult<List<Pedido>>> GetPedidosPorCliente(int clienteId)
+        [HttpGet]
+        public async Task<ActionResult<List<Pedido>>> GetPedidosPorCliente([FromQuery] int clienteId, [FromQuery] StatusPedido status)
         {
-            var pedidos = await _pedidoService.ObterPedidosPorCliente(clienteId);
+            var pedidos = await _pedidoService.ObterPedidos(clienteId, status);
             return Ok(pedidos);
         }
 
@@ -35,16 +36,15 @@ namespace TechStore.Controllers.api
             return Ok(pedido);
         }
 
-        [HttpPost("cliente/{clienteId:int}")]
-        public async Task<ActionResult> CriarOuObterPedido(int clienteId, [FromBody] PedidoDTO pedidoDto)
+        [HttpPost]
+        public async Task<ActionResult<PedidoResponse>> CriarPedido([FromBody] PedidoDTO pedidoDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var (pedido, criado) =
-                    await _pedidoService.CriarOuObterPedido(clienteId, pedidoDto);
+                var pedido = await _pedidoService.CriarPedido(pedidoDto);
 
                 var resposta = new PedidoResponse
                 {
@@ -57,16 +57,11 @@ namespace TechStore.Controllers.api
                     }).ToList()
                 };
 
-                if (criado)
-                {
-                    return CreatedAtAction(
-                        nameof(GetPedidoPorId),
-                        new { id = pedido.Id },
-                        resposta
-                    );
-                }
-
-                return Ok(resposta);
+                return CreatedAtAction(
+                    nameof(GetPedidoPorId),
+                    new { id = pedido.Id },
+                    resposta
+                );
             }
             catch (ArgumentException ex)
             {

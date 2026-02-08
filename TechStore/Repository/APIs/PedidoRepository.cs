@@ -10,11 +10,21 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public PedidoRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Pedido>> BuscarPorClienteId(int clienteId)
+        public async Task<List<Pedido>> Buscar(int? clienteId, StatusPedido? status)
         {
-            return await _context.Pedidos
-                .Where(p => p.ClienteId == clienteId)
-                .ToListAsync();
+            IQueryable<Pedido> query = _context.Pedidos;
+
+            if (clienteId.HasValue)
+            {
+                query = query.Where(p => p.ClienteId == clienteId);
+            }
+
+            if (status.HasValue)
+            {
+                query = query.Where(p => p.Status == status);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Pedido?> BuscarPorId(int id)
