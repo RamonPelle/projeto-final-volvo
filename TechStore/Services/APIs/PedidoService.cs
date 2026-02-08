@@ -68,23 +68,23 @@ namespace TechStore.Services.api
             List<ItemPedidoRequest> itens
         )
         {
-            foreach (var itemDto in itens)
+            foreach (var itemPedidoRequest in itens)
             {
                 var produto =
-                    await _produtoRepository.BuscarPorId(itemDto.ProdutoId)
+                    await _produtoRepository.BuscarPorId(itemPedidoRequest.ProdutoId)
                     ?? throw new ArgumentException(
-                        $"Produto {itemDto.ProdutoId} não encontrado."
+                        $"Produto {itemPedidoRequest.ProdutoId} não encontrado."
                     );
 
                 var itemExistente =
                     await _itemPedidoRepository.BuscarItem(
                         pedido.Id,
-                        itemDto.ProdutoId
+                        itemPedidoRequest.ProdutoId
                     );
 
                 if (itemExistente != null)
                 {
-                    itemExistente.Quantidade += itemDto.Quantidade;
+                    itemExistente.Quantidade += itemPedidoRequest.Quantidade;
                     await _itemPedidoRepository.AtualizarItem();
                 }
                 else
@@ -93,7 +93,7 @@ namespace TechStore.Services.api
                     {
                         PedidoId = pedido.Id,
                         ProdutoId = produto.Id,
-                        Quantidade = itemDto.Quantidade,
+                        Quantidade = itemPedidoRequest.Quantidade,
                         PrecoUnitario = produto.Preco
                     };
 
