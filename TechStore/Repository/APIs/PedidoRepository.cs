@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using TechStore.Models;
+using TechStore.Models.Enums;
+
 namespace TechStore.Repository.api
 {
     public class PedidoRepository
@@ -20,11 +22,18 @@ namespace TechStore.Repository.api
             return await _context.Pedidos.FindAsync(id);
         }
 
-        public async Task AdicionarPedido(Pedido pedido)
+        public async Task<Pedido?> ObterPedidoAtivoPorCliente(int clienteId)
         {
-            if (pedido is null)
-                throw new ArgumentNullException(nameof(pedido));
+            return await _context.Pedidos
+                .Include(p => p.Itens)
+                .FirstOrDefaultAsync(p =>
+                    p.ClienteId == clienteId &&
+                    p.Status == StatusPedido.Pendente
+                );
+        }
 
+        public async Task CriarPedido(Pedido pedido)
+        {
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
         }

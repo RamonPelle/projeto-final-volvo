@@ -8,7 +8,6 @@ namespace TechStore.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Range(1, int.MaxValue, ErrorMessage = "Pedido inválido.")]
         public int Id { get; set; }
 
         [Required]

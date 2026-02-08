@@ -16,6 +16,7 @@ namespace TechStore.Controllers.api
             _pedidoService = pedidoService;
         }
 
+        // TODO GET /api/pedido? clientId = 123 & status = pending
         [HttpGet("cliente/{clienteId:int}")]
         public async Task<ActionResult<List<Pedido>>> GetPedidosPorCliente(int clienteId)
         {
@@ -35,23 +36,37 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost("cliente/{clienteId:int}")]
-        public async Task<ActionResult> AdicionarPedido(int clienteId, [FromBody] PedidoDTO pedidoDto)
+        public async Task<ActionResult> CriarOuObterPedido(int clienteId, [FromBody] PedidoDTO pedidoDto)
         {
             if (!ModelState.IsValid)
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
-                return BadRequest(errorMessages);
-            }
+                return BadRequest(ModelState);
 
             try
             {
-                var novoPedido = await _pedidoService.AdicionarPedido(clienteId, pedidoDto);
+                var (pedido, criado) =
+                    await _pedidoService.CriarOuObterPedido(clienteId, pedidoDto);
 
-                return CreatedAtAction(
-                    nameof(GetPedidoPorId),
-                    new { id = novoPedido.Id },
-                    novoPedido
-                );
+                var resposta = new PedidoResponse
+                {
+                    Id = pedido.Id,
+                    Itens = pedido.Itens.Select(i => new PedidoResponse.ItensResponse
+                    {
+                        Id = i.Id,
+                        Quantidade = i.Quantidade,
+                        PrecoUnitario = i.PrecoUnitario
+                    }).ToList()
+                };
+
+                if (criado)
+                {
+                    return CreatedAtAction(
+                        nameof(GetPedidoPorId),
+                        new { id = pedido.Id },
+                        resposta
+                    );
+                }
+
+                return Ok(resposta);
             }
             catch (ArgumentException ex)
             {
