@@ -21,6 +21,11 @@ namespace TechStore.Repository.api
                     i.ProdutoId == produtoId);
         }
 
+        public async Task<ItemPedido?> BuscarItemPorId(int itemId)
+        {
+            return await _context.ItensPedido.FindAsync(itemId);
+        }
+
         public async Task AdicionarItem(ItemPedido item)
         {
             _context.ItensPedido.Add(item);

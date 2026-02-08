@@ -115,10 +115,21 @@ namespace TechStore.Services.api
             await _pedidoRepository.DeletarPedido(id);
         }
 
-        public async Task DeletarItem(int id, int iditem)
+        public async Task DeletarItem(int pedidoId, int itemId)
         {
-            // TODO validar se o item está no pedido
-            await _pedidoRepository.DeletarItem(iditem);
+            var item = await _itemPedidoRepository.BuscarItemPorId(itemId);
+
+            if (item == null)
+            {
+                return;
+            }
+            if (item.PedidoId == pedidoId)
+            {
+                await _pedidoRepository.DeletarItem(itemId);
+            } else
+            {
+                throw new ArgumentException("Item não pertence ao pedido.");
+            }
         }
 
         public async Task EditarPedido(int id, PedidoEditarRequest PedidoEditarDto)

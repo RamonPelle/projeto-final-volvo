@@ -131,12 +131,12 @@ namespace TechStore.Controllers.api
             }
         }
 
-        [HttpDelete("{id:int}/item/{iditem:int}")]
-        public async Task<IActionResult> DeletarItem(int id, int iditem)
+        [HttpDelete("{id:int}/item/{itemid:int}")]
+        public async Task<IActionResult> DeletarItem(int id, int itemId)
         {
             try
             {
-                await _pedidoService.DeletarItem(id, iditem);
+                await _pedidoService.DeletarItem(id, itemId);
                 return NoContent();
             }
             catch (KeyNotFoundException)
