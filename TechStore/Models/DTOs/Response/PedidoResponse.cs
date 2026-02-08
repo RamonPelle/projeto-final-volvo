@@ -1,4 +1,4 @@
-namespace TechStore.DTOs
+namespace TechStore.DTOs.Response
 {
     public class PedidoResponse
     {

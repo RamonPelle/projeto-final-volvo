@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TechStore.DTOs
+namespace TechStore.DTOs.Request
 {
-    public class ProdutoDTO
+    public class ProdutoRequest
     {
         [Required(ErrorMessage = "O nome do produto é obrigatório.")]
         [MaxLength(100, ErrorMessage = "O nome pode ter no máximo 100 caracteres.")]

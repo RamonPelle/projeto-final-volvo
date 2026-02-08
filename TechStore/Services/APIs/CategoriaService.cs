@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
-using TechStore.DTOs;
+using TechStore.DTOs.Request;
 using TechStore.Utils;
 
 namespace TechStore.Services.api
@@ -30,16 +30,16 @@ namespace TechStore.Services.api
             await _categoriaRepository.DeletarCategoria(id);
         }
 
-        public async Task<Categoria> AdicionarCategoria(CategoriaDTO categoriaDto)
+        public async Task<Categoria> AdicionarCategoria(CategoriaRequest categoriaRequest)
         {
-            if (categoriaDto == null)
+            if (categoriaRequest == null)
             {
-                throw new ArgumentNullException(nameof(categoriaDto), "A categoria não pode ser nula.");
+                throw new ArgumentNullException(nameof(categoriaRequest), "A categoria não pode ser nula.");
             }
 
             var categoria = new Categoria
             {
-                Nome = categoriaDto.Nome
+                Nome = categoriaRequest.Nome
             };
 
             var erros = ValidadorEntidade.Validar(categoria);
@@ -53,7 +53,7 @@ namespace TechStore.Services.api
             return categoria;
         }
 
-        public async Task EditarCategoria(int id, CategoriaDTO dto)
+        public async Task EditarCategoria(int id, CategoriaRequest dto)
         {
             var categoria = await _categoriaRepository.BuscarPorId(id);
 

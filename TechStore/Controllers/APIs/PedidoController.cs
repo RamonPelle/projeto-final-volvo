@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TechStore.Models;
 using TechStore.Services.api;
-using TechStore.DTOs;
+using TechStore.DTOs.Request;
+using TechStore.DTOs.Response;
 using TechStore.Models.Enums;
 
 namespace TechStore.Controllers.api
@@ -37,14 +38,14 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
-        public async Task<ActionResult<PedidoResponse>> CriarPedido([FromBody] PedidoDTO pedidoDto)
+        public async Task<ActionResult<PedidoResponse>> CriarPedido([FromBody] PedidoRequest pedidoRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var pedido = await _pedidoService.CriarPedido(pedidoDto);
+                var pedido = await _pedidoService.CriarPedido(pedidoRequest);
 
                 var resposta = new PedidoResponse
                 {
@@ -70,14 +71,14 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> EditarPedido(int id, [FromBody] PedidoEditarDTO pedidoEditarDto)
+        public async Task<IActionResult> EditarPedido(int id, [FromBody] PedidoEditarRequest pedidoEditarRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                await _pedidoService.EditarPedido(id, pedidoEditarDto);
+                await _pedidoService.EditarPedido(id, pedidoEditarRequest);
                 return NoContent();
             }
             catch (KeyNotFoundException)

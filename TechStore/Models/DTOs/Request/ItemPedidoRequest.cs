@@ -1,6 +1,6 @@
-namespace TechStore.DTOs
+namespace TechStore.DTOs.Request
 {
-    public class ItemPedidoDTO
+    public class ItemPedidoRequest
     {
         public int ProdutoId { get; set; }
         public int Quantidade { get; set; }

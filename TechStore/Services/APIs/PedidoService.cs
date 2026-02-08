@@ -1,8 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
-using TechStore.DTOs;
-using TechStore.Utils;
+using TechStore.DTOs.Request;
 using TechStore.Models.Enums;
 
 namespace TechStore.Services.api
@@ -39,9 +37,9 @@ namespace TechStore.Services.api
             return await _pedidoRepository.BuscarPorId(id);
         }
 
-        public async Task<Pedido> CriarPedido(PedidoDTO dto)
+        public async Task<Pedido> CriarPedido(PedidoRequest pedidoRequest)
         {
-            var pedidoExistente = await _pedidoRepository.ObterPedidoAtivoPorCliente(dto.ClienteId);
+            var pedidoExistente = await _pedidoRepository.ObterPedidoAtivoPorCliente(pedidoRequest.ClienteId);
 
             if(pedidoExistente != null)
             {
@@ -52,22 +50,22 @@ namespace TechStore.Services.api
 
             var novoPedido = new Pedido
             {
-                ClienteId = dto.ClienteId,
+                ClienteId = pedidoRequest.ClienteId,
                 Data = DateTime.UtcNow,
                 Status = StatusPedido.Pendente
             };
 
             await _pedidoRepository.CriarPedido(novoPedido);
 
-            if (dto.Itens != null && dto.Itens.Any())
-                await AdicionarItens(novoPedido, dto.Itens);
+            if (pedidoRequest.Itens != null && pedidoRequest.Itens.Any())
+                await AdicionarItens(novoPedido, pedidoRequest.Itens);
 
             return novoPedido;
         }
 
         private async Task AdicionarItens(
             Pedido pedido,
-            List<ItemPedidoDTO> itens
+            List<ItemPedidoRequest> itens
         )
         {
             foreach (var itemDto in itens)
@@ -117,7 +115,7 @@ namespace TechStore.Services.api
             await _pedidoRepository.DeletarPedido(id);
         }
 
-        public async Task EditarPedido(int id, PedidoEditarDTO PedidoEditarDto)
+        public async Task EditarPedido(int id, PedidoEditarRequest PedidoEditarDto)
         {
             if (id <= 0)
                 throw new ArgumentException("Id do pedido inválido.");

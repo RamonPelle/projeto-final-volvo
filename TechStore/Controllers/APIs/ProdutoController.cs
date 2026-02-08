@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TechStore.Data;
 using TechStore.Models;
-using Microsoft.EntityFrameworkCore;
 using TechStore.Services.api;
-using TechStore.DTOs;
+using TechStore.DTOs.Request;
 
 namespace TechStore.Controllers.api
 {
@@ -54,7 +52,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostProduto([FromBody] ProdutoDTO produtoDto)
+        public async Task<ActionResult> PostProduto([FromBody] ProdutoRequest produtoRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +62,7 @@ namespace TechStore.Controllers.api
 
             try
             {
-                var novoProduto = await _produtoService.AdicionarProduto(produtoDto);
+                var novoProduto = await _produtoService.AdicionarProduto(produtoRequest);
                 return CreatedAtAction(nameof(GetProdutos), new { id = novoProduto.Id }, novoProduto);
             }
             catch (ArgumentException ex)
@@ -74,7 +72,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditarProduto(int id, [FromBody] ProdutoDTO produtoDto)
+        public async Task<IActionResult> EditarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -84,7 +82,7 @@ namespace TechStore.Controllers.api
 
             try
             {
-                await _produtoService.EditarProduto(id, produtoDto);
+                await _produtoService.EditarProduto(id, produtoRequest);
                 return NoContent();
             }
             catch (KeyNotFoundException)
