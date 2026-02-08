@@ -41,6 +41,15 @@ namespace TechStore.Services.api
 
         public async Task<Pedido> CriarPedido(PedidoDTO dto)
         {
+            var pedidoExistente = await _pedidoRepository.ObterPedidoAtivoPorCliente(dto.ClienteId);
+
+            if(pedidoExistente != null)
+            {
+                throw new ArgumentException(
+                "Cliente já possui um pedido pendente."
+                );
+            }
+
             var novoPedido = new Pedido
             {
                 ClienteId = dto.ClienteId,
