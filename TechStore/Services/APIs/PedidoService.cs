@@ -115,6 +115,12 @@ namespace TechStore.Services.api
             await _pedidoRepository.DeletarPedido(id);
         }
 
+        public async Task DeletarItem(int id, int iditem)
+        {
+            // TODO validar se o item está no pedido
+            await _pedidoRepository.DeletarItem(iditem);
+        }
+
         public async Task EditarPedido(int id, PedidoEditarRequest PedidoEditarDto)
         {
             if (id <= 0)

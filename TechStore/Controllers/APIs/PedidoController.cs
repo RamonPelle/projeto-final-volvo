@@ -18,23 +18,45 @@ namespace TechStore.Controllers.api
             _pedidoService = pedidoService;
         }
 
-        // TODO GET /api/pedido? clientId = 123 & status = pending
         [HttpGet]
-        public async Task<ActionResult<List<Pedido>>> GetPedidosPorCliente([FromQuery] int clienteId, [FromQuery] StatusPedido status)
+        public async Task<ActionResult<List<PedidoResponse>>> GetPedidosPorCliente([FromQuery] int clienteId, [FromQuery] StatusPedido status)
         {
             var pedidos = await _pedidoService.ObterPedidos(clienteId, status);
-            return Ok(pedidos);
+
+            var resposta = pedidos.Select(p => new PedidoResponse
+            {
+                Id = p.Id,
+                Itens = p.Itens.Select(i => new PedidoResponse.ItensResponse
+                {
+                    Id = i.Id,
+                    Quantidade = i.Quantidade,
+                    PrecoUnitario = i.PrecoUnitario
+                }).ToList()
+            });
+
+            return Ok(resposta);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Pedido>> GetPedidoPorId(int id)
+        public async Task<ActionResult<PedidoResponse>> GetPedidoPorId(int id)
         {
             var pedido = await _pedidoService.BuscarPedidoPorId(id);
 
             if (pedido is null)
                 return NotFound();
 
-            return Ok(pedido);
+            var resposta = new PedidoResponse
+            {
+                Id = pedido.Id,
+                Itens = pedido.Itens.Select(i => new PedidoResponse.ItensResponse
+                {
+                    Id = i.Id,
+                    Quantidade = i.Quantidade,
+                    PrecoUnitario = i.PrecoUnitario
+                }).ToList()
+            };
+
+            return Ok(resposta);
         }
 
         [HttpPost]
@@ -108,5 +130,24 @@ namespace TechStore.Controllers.api
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{id:int}/item/{iditem:int}")]
+        public async Task<IActionResult> DeletarItem(int id, int iditem)
+        {
+            try
+            {
+                await _pedidoService.DeletarItem(id, iditem);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

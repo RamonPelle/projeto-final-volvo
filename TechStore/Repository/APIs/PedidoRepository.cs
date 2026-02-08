@@ -24,12 +24,12 @@ namespace TechStore.Repository.api
                 query = query.Where(p => p.Status == status);
             }
 
-            return await query.ToListAsync();
+            return await query.Include(p => p.Itens).ToListAsync();
         }
 
         public async Task<Pedido?> BuscarPorId(int id)
         {
-            return await _context.Pedidos.FindAsync(id);
+            return await _context.Pedidos.Include(p => p.Itens).FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Pedido?> ObterPedidoAtivoPorCliente(int clienteId)
@@ -53,6 +53,11 @@ namespace TechStore.Repository.api
             await _context.Pedidos
                 .Where(p => p.Id == id)
                 .ExecuteDeleteAsync();
+        }
+
+        public async Task DeletarItem(int id)
+        {
+            await _context.ItensPedido.Where(i => i.Id == id).ExecuteDeleteAsync();
         }
 
         public async Task EditarPedido(Pedido pedido)
