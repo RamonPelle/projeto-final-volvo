@@ -27,6 +27,5 @@ namespace TechStore.Models
 
         [ForeignKey("CategoriaId")]
         public int CategoriaId { get; set; }
-
     }
 }
