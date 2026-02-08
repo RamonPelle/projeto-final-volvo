@@ -25,9 +25,44 @@ namespace TechStore.Controllers.api
             return Ok(categorias);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Categoria>> GetCategoriaPorId(int id)
+        {
+            var categoria = await _categoriaService.BuscarCategoriaPorId(id);
+
+            if (categoria == null)
+                return NotFound();
+
+            return Ok(categoria);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletarCategoria(int id)
+        {
+            try
+            {
+                await _categoriaService.DeletarCategoria(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostCategoria([FromBody] CategoriaDTO categoriaDto)
         {
+            if (!ModelState.IsValid)
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
+                return BadRequest(errorMessages);
+            }
+
             try
             {
                 var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaDto);
@@ -38,5 +73,30 @@ namespace TechStore.Controllers.api
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditarCategoria(int id, [FromBody] CategoriaDTO categoriaDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
+                return BadRequest(errorMessages);
+            }
+
+            try
+            {
+                await _categoriaService.EditarCategoria(id, categoriaDto);
+                return NoContent(); 
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
