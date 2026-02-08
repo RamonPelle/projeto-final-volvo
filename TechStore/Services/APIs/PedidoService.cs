@@ -112,16 +112,6 @@ namespace TechStore.Services.api
             }
         }
 
-        public async Task<StatusPedido> ObterStatus(int id)
-        {
-            var pedido = await _pedidoRepository.BuscarPorId(id);
-
-            if (pedido == null)
-                throw new KeyNotFoundException("Pedido não encontrado.");
-
-            return pedido.Status;
-        }
-
         public async Task DeletarPedido(int id)
         {
             var pedido = await _pedidoRepository.BuscarPorId(id);

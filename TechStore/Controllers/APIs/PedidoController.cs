@@ -74,20 +74,6 @@ namespace TechStore.Controllers.api
             }
         }
 
-        [HttpGet("{id:int}/status")]
-        public async Task<IActionResult> GetStatus(int id)
-        {
-            try
-            {
-                var status = await _pedidoService.ObterStatus(id);
-                return Ok(status);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-        }
-
         [HttpPut("{id:int}")]
         public async Task<IActionResult> EditarPedido(int id, [FromBody] PedidoEditarDTO pedidoEditarDto)
         {
