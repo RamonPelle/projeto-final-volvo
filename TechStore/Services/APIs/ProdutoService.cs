@@ -24,19 +24,32 @@ namespace TechStore.Services.api
 
         public async Task<Produto?> BuscarProdutoPorId(int id)
         {
-            return await _produtoRepository.BuscarPorId(id);
+            if (id <= 0)
+                throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
+
+            var produto = await _produtoRepository.BuscarPorId(id);
+
+            if (produto == null)
+                throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
+
+            return produto;
         }
 
         public async Task DeletarProduto(int id)
         {
+            if (id <= 0)
+                throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
+
+            var produto = await _produtoRepository.BuscarPorId(id);
+
+            if (produto == null)
+                throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
+
             await _produtoRepository.DeletarProduto(id);
         }
 
         public async Task<Produto> AdicionarProduto(ProdutoRequest produtoRequest)
         {
-            if (produtoRequest == null)
-                throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
-
             var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
 
             if (categoria == null)
@@ -62,10 +75,13 @@ namespace TechStore.Services.api
 
         public async Task AtualizarProduto(int id, ProdutoRequest produtoRequest)
         {
+            if (produtoRequest == null)
+                throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
+
             var produto = await _produtoRepository.BuscarPorId(id);
 
             if (produto == null)
-                throw new KeyNotFoundException();
+                throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
 
             var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
 

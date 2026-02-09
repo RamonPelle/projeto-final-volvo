@@ -26,23 +26,31 @@ namespace TechStore.Controllers.api
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Produto>> BuscarProdutoPorId(int id)
         {
-            if (id <= 0)
-                return BadRequest("Id inválido. Deve ser maior que zero");
-
-            var produto = await _produtoService.BuscarProdutoPorId(id);
-
-            if (produto == null)
-                return NotFound();
-
-            return Ok(produto);
+            try
+            {
+                var produto = await _produtoService.BuscarProdutoPorId(id);
+                return Ok(produto);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    "Erro interno inesperado."
+                );
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletarProduto(int id)
         {
-            if (id <= 0)
-                return BadRequest("Id inválido. Deve ser maior que zero");
-
             try
             {
                 await _produtoService.DeletarProduto(id);
@@ -55,6 +63,10 @@ namespace TechStore.Controllers.api
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Erro interno inesperado.");
             }
         }
 
@@ -84,14 +96,15 @@ namespace TechStore.Controllers.api
             {
                 return BadRequest(ex.Message);
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Erro interno inesperado.");
+            }
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
-            if (id <= 0)
-                return BadRequest("Id inválido. Deve ser maior que zero");
-
             if (produtoRequest == null)
                 return BadRequest("Corpo da requisição não pode ser nulo.");
 
@@ -117,6 +130,10 @@ namespace TechStore.Controllers.api
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Erro interno inesperado.");
             }
         }
     }
