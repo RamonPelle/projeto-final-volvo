@@ -148,3 +148,5 @@ C:\Users\ramon\Desktop\projeto-final-volvo\TechStore\obj\Debug\net8.0\TechStore.
 C:\Users\ramon\Desktop\projeto-final-volvo\TechStore\obj\Debug\net8.0\TechStore.genruntimeconfig.cache
 C:\Users\ramon\Desktop\projeto-final-volvo\TechStore\obj\Debug\net8.0\ref\TechStore.dll
 C:\Users\ramon\Desktop\projeto-final-volvo\TechStore\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.Versioning.dll
+C:\Users\ramon\Desktop\projeto-final-volvo\TechStore\bin\Debug\net8.0\TechStore.xml
+C:\Users\ramon\Desktop\projeto-final-volvo\TechStore\obj\Debug\net8.0\TechStore.xml
