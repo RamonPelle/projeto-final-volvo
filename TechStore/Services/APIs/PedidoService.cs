@@ -29,7 +29,7 @@ namespace TechStore.Services.api
 
         public async Task<List<Pedido>> ObterPedidos(int? clienteId, StatusPedido? status)
         {
-            return await _pedidoRepository.Buscar(clienteId, status);
+            return await _pedidoRepository.BuscarTodos(clienteId, status);
         }
 
         public async Task<Pedido?> BuscarPedidoPorId(int id)
@@ -41,7 +41,7 @@ namespace TechStore.Services.api
         {
             var pedidoExistente = await _pedidoRepository.ObterPedidoAtivoPorCliente(pedidoRequest.ClienteId);
 
-            if(pedidoExistente != null)
+            if (pedidoExistente != null)
             {
                 throw new ArgumentException(
                 "Cliente já possui um pedido pendente."
@@ -126,7 +126,8 @@ namespace TechStore.Services.api
             if (item.PedidoId == pedidoId)
             {
                 await _pedidoRepository.DeletarItem(itemId);
-            } else
+            }
+            else
             {
                 throw new ArgumentException("Item não pertence ao pedido.");
             }

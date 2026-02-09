@@ -16,10 +16,8 @@ namespace TechStore.Models
         [Column(TypeName = "decimal(8,2)")] // Define max 999.999,99
         [Required]
         public decimal PrecoUnitario { get; set; }
-
         public int PedidoId { get; set; }
         public Pedido Pedido { get; set; } = null!;
-
         public int ProdutoId { get; set; }
         public Produto Produto { get; set; } = null!;
     }

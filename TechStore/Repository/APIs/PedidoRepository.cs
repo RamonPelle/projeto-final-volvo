@@ -10,7 +10,7 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public PedidoRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Pedido>> Buscar(int? clienteId, StatusPedido? status)
+        public async Task<List<Pedido>> BuscarTodos(int? clienteId, StatusPedido? status)
         {
             IQueryable<Pedido> query = _context.Pedidos;
 
