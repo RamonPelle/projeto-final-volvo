@@ -17,14 +17,14 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Produto>>> GetProdutos()
+        public async Task<ActionResult<List<Produto>>> BuscarProdutos()
         {
             var produtos = await _produtoService.ObterTodosProdutos();
             return Ok(produtos);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Produto>> GetProdutoPorId(int id)
+        public async Task<ActionResult<Produto>> BuscarProdutoPorId(int id)
         {
             var produto = await _produtoService.BuscarProdutoPorId(id);
 
@@ -53,7 +53,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostProduto([FromBody] ProdutoRequest produtoRequest)
+        public async Task<ActionResult> AdicionarProduto([FromBody] ProdutoRequest produtoRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace TechStore.Controllers.api
             try
             {
                 var novoProduto = await _produtoService.AdicionarProduto(produtoRequest);
-                return CreatedAtAction(nameof(GetProdutos), new { id = novoProduto.Id }, novoProduto);
+                return CreatedAtAction(nameof(BuscarProdutos), new { id = novoProduto.Id }, novoProduto);
             }
             catch (ArgumentException ex)
             {
@@ -77,7 +77,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> EditarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
+        public async Task<IActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace TechStore.Controllers.api
 
             try
             {
-                await _produtoService.EditarProduto(id, produtoRequest);
+                await _produtoService.AtualizarProduto(id, produtoRequest);
                 return NoContent();
             }
             catch (ValidationException ex)
