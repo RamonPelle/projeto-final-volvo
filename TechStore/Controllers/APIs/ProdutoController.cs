@@ -73,12 +73,6 @@ namespace TechStore.Controllers.api
         [HttpPost]
         public async Task<ActionResult> AdicionarProduto([FromBody] ProdutoRequest produtoRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
-                return BadRequest(errorMessages);
-            }
-
             try
             {
                 var novoProduto = await _produtoService.AdicionarProduto(produtoRequest);
