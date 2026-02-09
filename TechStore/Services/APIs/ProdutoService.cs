@@ -37,6 +37,11 @@ namespace TechStore.Services.api
             if (produtoRequest == null)
                 throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
 
+            var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
+
+            if (categoria == null)
+                throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
+
             var produto = new Produto
             {
                 Nome = produtoRequest.Nome,

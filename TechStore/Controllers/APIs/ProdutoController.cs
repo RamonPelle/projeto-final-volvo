@@ -70,6 +70,10 @@ namespace TechStore.Controllers.api
             {
                 return BadRequest(ex.Message);
             }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id:int}")]
