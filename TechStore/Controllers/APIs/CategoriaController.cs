@@ -2,11 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.DTOs.Request;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace TechStore.Controllers.api
 {
+    /// <summary>
+    /// Controller para operações de Categoria.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     public class CategoriaController : ControllerBase
     {
         private readonly CategoriaService _categoriaService;
@@ -17,6 +23,8 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Retorna todas as categorias", Description = "Obtém a lista completa de categorias cadastradas.")]
+        [SwaggerResponse(200, "Lista de categorias retornada com sucesso.", typeof(List<Categoria>))]
         public async Task<ActionResult<List<Categoria>>> GetCategorias()
         {
             var categorias = await _categoriaService.ObterTodasCategorias();
@@ -24,6 +32,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet("{id:int}")]
+        [SwaggerOperation(Summary = "Retorna categoria por ID", Description = "Obtém uma categoria específica pelo seu identificador.")]
+        [SwaggerResponse(200, "Categoria encontrada.", typeof(Categoria))]
+        [SwaggerResponse(404, "Categoria não encontrada.")]
         public async Task<ActionResult<Categoria>> GetCategoriaPorId(int id)
         {
             var categoria = await _categoriaService.BuscarCategoriaPorId(id);
@@ -35,6 +46,10 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
+        [SwaggerOperation(Summary = "Deleta categoria por ID", Description = "Remove uma categoria específica pelo seu identificador.")]
+        [SwaggerResponse(204, "Categoria deletada com sucesso.")]
+        [SwaggerResponse(404, "Categoria não encontrada.")]
+        [SwaggerResponse(400, "Erro de validação.")]
         public async Task<IActionResult> DeletarCategoria(int id)
         {
             try
@@ -53,6 +68,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Cria nova categoria", Description = "Adiciona uma nova categoria ao sistema.")]
+        [SwaggerResponse(201, "Categoria criada com sucesso.")]
+        [SwaggerResponse(400, "Erro de validação.")]
         public async Task<ActionResult> PostCategoria([FromBody] CategoriaRequest categoriaRequest)
         {
             if (!ModelState.IsValid)
@@ -73,6 +91,10 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
+        [SwaggerOperation(Summary = "Edita categoria", Description = "Edita uma categoria pelo seu identificador.")]
+        [SwaggerResponse(204, "Categoria editada com sucesso.")]
+        [SwaggerResponse(404, "Categoria não encontrada.")]
+        [SwaggerResponse(400, "Erro de validação.")]
         public async Task<IActionResult> EditarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
         {
             if (!ModelState.IsValid)
