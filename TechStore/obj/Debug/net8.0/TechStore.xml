@@ -9,6 +9,16 @@
             Controller para operações de Categoria.
             </summary>
         </member>
+        <member name="T:TechStore.Controllers.api.PedidoController">
+            <summary>
+            Controller para operações de Pedido.
+            </summary>
+        </member>
+        <member name="T:TechStore.Controllers.api.ProdutoController">
+            <summary>
+            Controller para operações de Produto.
+            </summary>
+        </member>
         <member name="T:TechStore.Migrations.Inicial">
             <inheritdoc />
         </member>
@@ -92,6 +102,28 @@
         </member>
         <member name="M:TechStore.Migrations.AlteraIDPedido.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
+        </member>
+        <member name="T:TechStore.Models.Categoria">
+            <summary>
+            Representa uma categoria de produtos.
+            </summary>
+        </member>
+        <member name="P:TechStore.Models.Categoria.Id">
+            <summary>
+            ID único da categoria.
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:TechStore.Models.Categoria.Nome">
+            <summary>
+            Nome da categoria.
+            </summary>
+            <example>Smartphones</example>
+        </member>
+        <member name="P:TechStore.Models.Categoria.Produtos">
+            <summary>
+            Lista de produtos associados a esta categoria.
+            </summary>
         </member>
     </members>
 </doc>

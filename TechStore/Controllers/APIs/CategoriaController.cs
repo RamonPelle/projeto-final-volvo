@@ -32,7 +32,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet("{id:int}")]
-        [SwaggerOperation(Summary = "Retorna categoria por ID", Description = "Obtém uma categoria específica pelo seu identificador.")]
+        [SwaggerOperation(Summary = "Retorna categoria por ID", Description = "Obtém uma categoria específica pelo seu ID.")]
         [SwaggerResponse(200, "Categoria encontrada.", typeof(Categoria))]
         [SwaggerResponse(404, "Categoria não encontrada.")]
         public async Task<ActionResult<Categoria>> GetCategoriaPorId(int id)
@@ -46,7 +46,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        [SwaggerOperation(Summary = "Deleta categoria por ID", Description = "Remove uma categoria específica pelo seu identificador.")]
+        [SwaggerOperation(Summary = "Deleta categoria por ID", Description = "Remove uma categoria específica pelo seu ID.")]
         [SwaggerResponse(204, "Categoria deletada com sucesso.")]
         [SwaggerResponse(404, "Categoria não encontrada.")]
         [SwaggerResponse(400, "Erro de validação.")]
@@ -91,7 +91,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        [SwaggerOperation(Summary = "Edita categoria", Description = "Edita uma categoria pelo seu identificador.")]
+        [SwaggerOperation(Summary = "Edita categoria", Description = "Edita uma categoria pelo seu ID.")]
         [SwaggerResponse(204, "Categoria editada com sucesso.")]
         [SwaggerResponse(404, "Categoria não encontrada.")]
         [SwaggerResponse(400, "Erro de validação.")]

@@ -4,11 +4,17 @@ using TechStore.Services.api;
 using TechStore.DTOs.Request;
 using TechStore.DTOs.Response;
 using TechStore.Models.Enums;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace TechStore.Controllers.api
 {
+    /// <summary>
+    /// Controller para operações de Pedido.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [Produces("application/json")]
+    [Consumes("application/json")]
     public class PedidoController : ControllerBase
     {
         private readonly PedidoService _pedidoService;
@@ -19,6 +25,8 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Retorna pedidos por cliente e status", Description = "Obtém a lista de pedidos para um cliente específico, opcionalmente filtrada por status.")]
+        [SwaggerResponse(200, "Lista de pedidos retornada com sucesso.", typeof(List<PedidoResponse>))]
         public async Task<ActionResult<List<PedidoResponse>>> GetPedidosPorCliente([FromQuery] int clienteId, [FromQuery] StatusPedido status)
         {
             var pedidos = await _pedidoService.ObterPedidos(clienteId, status);
@@ -38,6 +46,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet("{id:int}")]
+        [SwaggerOperation(Summary = "Retorna pedido por ID", Description = "Obtém um pedido específico pelo seu ID.")]
+        [SwaggerResponse(200, "Pedido encontrado.", typeof(PedidoResponse))]
+        [SwaggerResponse(404, "Pedido não encontrado.")]
         public async Task<ActionResult<PedidoResponse>> GetPedidoPorId(int id)
         {
             var pedido = await _pedidoService.BuscarPedidoPorId(id);
@@ -60,6 +71,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "Cria novo pedido", Description = "Adiciona um novo pedido ao sistema.")]
+        [SwaggerResponse(201, "Pedido criado com sucesso.", typeof(PedidoResponse))]
+        [SwaggerResponse(400, "Erro de validação.")]
         public async Task<ActionResult<PedidoResponse>> CriarPedido([FromBody] PedidoRequest pedidoRequest)
         {
             if (!ModelState.IsValid)
@@ -93,6 +107,10 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
+        [SwaggerOperation(Summary = "Edita pedido", Description = "Edita um pedido pelo seu ID.")]
+        [SwaggerResponse(204, "Pedido editado com sucesso.")]
+        [SwaggerResponse(404, "Pedido não encontrado.")]
+        [SwaggerResponse(400, "Erro de validação.")]
         public async Task<IActionResult> EditarPedido(int id, [FromBody] PedidoEditarRequest pedidoEditarRequest)
         {
             if (!ModelState.IsValid)
@@ -114,6 +132,10 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
+        [SwaggerOperation(Summary = "Deleta pedido por ID", Description = "Remove um pedido específico pelo seu ID.")]
+        [SwaggerResponse(204, "Pedido deletado com sucesso.")]
+        [SwaggerResponse(404, "Pedido não encontrado.")]
+        [SwaggerResponse(400, "Erro de validação.")]
         public async Task<IActionResult> DeletarPedido(int id)
         {
             try
@@ -132,6 +154,10 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}/item/{itemid:int}")]
+        [SwaggerOperation(Summary = "Deleta item de um pedido", Description = "Remove um item específico de um pedido.")]
+        [SwaggerResponse(204, "Item do pedido deletado com sucesso.")]
+        [SwaggerResponse(404, "Pedido ou item não encontrado.")]
+        [SwaggerResponse(400, "Erro de validação.")]
         public async Task<IActionResult> DeletarItem(int id, int itemId)
         {
             try
