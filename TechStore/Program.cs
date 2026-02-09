@@ -3,6 +3,7 @@ using TechStore.Data;
 using TechStore.Services.api;
 using TechStore.Repository.api;
 using TechStore.Middlewares;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // DI
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ProdutoRepository>();

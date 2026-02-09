@@ -3,19 +3,25 @@ using TechStore.Models;
 using TechStore.Repository.api;
 using TechStore.Utils;
 using TechStore.DTOs.Request;
+using AutoMapper;
 
 namespace TechStore.Services.api
 {
     public class ProdutoService
     {
+        private readonly IMapper _mapper;
         private readonly ProdutoRepository _produtoRepository;
         private readonly CategoriaRepository _categoriaRepository;
 
-        public ProdutoService(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository)
-        {
-            _produtoRepository = produtoRepository;
-            _categoriaRepository = categoriaRepository;
-        }
+        public ProdutoService(
+            ProdutoRepository produtoRepository,
+            CategoriaRepository categoriaRepository,
+            IMapper mapper)
+                {
+                    _produtoRepository = produtoRepository;
+                    _categoriaRepository = categoriaRepository;
+                    _mapper = mapper;
+                }
 
         public async Task<List<Produto>> ObterTodosProdutos()
         {
@@ -55,14 +61,7 @@ namespace TechStore.Services.api
             if (categoria == null)
                 throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
 
-            var produto = new Produto
-            {
-                Nome = produtoRequest.Nome,
-                Preco = produtoRequest.Preco,
-                Descricao = produtoRequest.Descricao,
-                Estoque = produtoRequest.Estoque,
-                CategoriaId = produtoRequest.CategoriaId
-            };
+            var produto = _mapper.Map<Produto>(produtoRequest);
 
             var erros = ValidadorEntidade.Validar(produto);
 
@@ -88,11 +87,7 @@ namespace TechStore.Services.api
             if (categoria == null)
                 throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
 
-            produto.Nome = produtoRequest.Nome;
-            produto.Preco = produtoRequest.Preco;
-            produto.Descricao = produtoRequest.Descricao;
-            produto.Estoque = produtoRequest.Estoque;
-            produto.CategoriaId = produtoRequest.CategoriaId;
+            _mapper.Map(produtoRequest, produto);
 
             var erros = ValidadorEntidade.Validar(produto);
             if (erros.Any())
