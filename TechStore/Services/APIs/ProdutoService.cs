@@ -61,6 +61,10 @@ namespace TechStore.Services.api
                 throw new KeyNotFoundException();
 
             produto.Nome = produtoRequest.Nome;
+            produto.Preco = produtoRequest.Preco;
+            produto.Descricao = produtoRequest.Descricao;
+            produto.Estoque = produtoRequest.Estoque;
+            produto.CategoriaId = produtoRequest.CategoriaId;
 
             var erros = ValidadorEntidade.Validar(produto);
             if (erros.Any())
