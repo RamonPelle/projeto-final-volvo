@@ -21,13 +21,13 @@ namespace TechStore.Repository.api
             await _context.Produtos.Where(produto => produto.Id == id).ExecuteDeleteAsync();
         }
 
-        public async Task Adicionar(Produto produto)
+        public async Task AdicionarProduto(Produto produto)
         {
             await _context.Produtos.AddAsync(produto);
             await _context.SaveChangesAsync();
         }
 
-        public async Task EditarProduto(Produto produto)
+        public async Task AtualizarProduto(Produto produto)
         {
             _context.Produtos.Update(produto);
             await _context.SaveChangesAsync();

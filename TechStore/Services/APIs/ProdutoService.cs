@@ -56,11 +56,11 @@ namespace TechStore.Services.api
             if (erros.Any())
                 throw new ValidationException(string.Join("; ", erros));
 
-            await _produtoRepository.Adicionar(produto);
+            await _produtoRepository.AdicionarProduto(produto);
             return produto;
         }
 
-        public async Task EditarProduto(int id, ProdutoRequest produtoRequest)
+        public async Task AtualizarProduto(int id, ProdutoRequest produtoRequest)
         {
             var produto = await _produtoRepository.BuscarPorId(id);
 
@@ -82,7 +82,7 @@ namespace TechStore.Services.api
             if (erros.Any())
                 throw new ValidationException(string.Join("; ", erros));
 
-            await _produtoRepository.EditarProduto(produto);
+            await _produtoRepository.AtualizarProduto(produto);
         }
     }
 }
