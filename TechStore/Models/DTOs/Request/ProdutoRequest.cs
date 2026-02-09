@@ -9,7 +9,12 @@ namespace TechStore.DTOs.Request
         public string Nome { get; set; } = null!;
 
         [Required(ErrorMessage = "O preço do produto é obrigatório.")]
-        [Range(0.00, 999999.99, ErrorMessage = "O preço deve ser maior que zero.")]
+        [Range(
+            typeof(decimal),
+            "0.00",
+            "9999999999999999.99",
+            ErrorMessage = "O preço não pode ser negativo, e nem possuir mais do que 16 dígitos."
+        )]
         public decimal Preco { get; set; }
 
         [Required(ErrorMessage = "A descrição é obrigatória.")]

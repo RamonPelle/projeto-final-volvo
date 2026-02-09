@@ -14,7 +14,7 @@ namespace TechStore.Models
         [MaxLength(100)]
         public string Nome { get; set; } = null!;
 
-        [Column(TypeName = "decimal(8,2)")] // Define max 999.999,99
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Preco { get; set; }
 
         [Required]
