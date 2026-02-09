@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TechStore.DTOs
+namespace TechStore.DTOs.Request
 {
-    public class CategoriaDTO
+    public class CategoriaRequest
     {
         [Required(ErrorMessage = "O nome da categoria é obrigatório.")]
         [MaxLength(30)]

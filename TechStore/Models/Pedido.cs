@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TechStore.Models.Enums;
 
-using TechStore.Models;
 namespace TechStore.Models
 {
-
     public partial class Pedido
     {
         [Key]
@@ -14,8 +13,12 @@ namespace TechStore.Models
         [Required]
         public DateTime Data { get; set; }
 
-        [ForeignKey("ClienteId")]
+        [Required]
         public int ClienteId { get; set; }
 
+        public ICollection<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
+
+        [Required]
+        public StatusPedido Status { get; set; } = StatusPedido.Pendente;
     }
 }

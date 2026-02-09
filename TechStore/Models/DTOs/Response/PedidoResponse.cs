@@ -1,0 +1,15 @@
+namespace TechStore.DTOs.Response
+{
+    public class PedidoResponse
+    {
+        public int Id { get; set; }
+        public List<ItensResponse> Itens { get; set; } = new();
+
+        public class ItensResponse
+        {
+            public int Id { get; set; }
+            public int Quantidade { get; set; }
+            public decimal PrecoUnitario { get; set; }
+        }
+    }
+}

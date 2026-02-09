@@ -25,8 +25,6 @@ namespace TechStore.Models
         [Required]
         public int Estoque { get; set; }
 
-        [ForeignKey("CategoriaId")]
         public int CategoriaId { get; set; }
-
     }
 }

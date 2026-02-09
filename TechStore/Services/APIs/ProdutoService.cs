@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
 using TechStore.Utils;
-using TechStore.DTOs;
+using TechStore.DTOs.Request;
 
 namespace TechStore.Services.api
 {
@@ -30,18 +30,18 @@ namespace TechStore.Services.api
             await _produtoRepository.DeletarProduto(id);
         }
 
-        public async Task<Produto> AdicionarProduto(ProdutoDTO produtoDto)
+        public async Task<Produto> AdicionarProduto(ProdutoRequest produtoRequest)
         {
-            if (produtoDto == null)
-                throw new ArgumentNullException(nameof(produtoDto), "O produto não pode ser nulo.");
+            if (produtoRequest == null)
+                throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
 
             var produto = new Produto
             {
-                Nome = produtoDto.Nome,
-                Preco = produtoDto.Preco,
-                Descricao = produtoDto.Descricao,
-                Estoque = produtoDto.Estoque,
-                CategoriaId = produtoDto.CategoriaId
+                Nome = produtoRequest.Nome,
+                Preco = produtoRequest.Preco,
+                Descricao = produtoRequest.Descricao,
+                Estoque = produtoRequest.Estoque,
+                CategoriaId = produtoRequest.CategoriaId
             };
 
             var erros = ValidadorEntidade.Validar(produto);
@@ -53,14 +53,14 @@ namespace TechStore.Services.api
             return produto;
         }
 
-        public async Task EditarProduto(int id, ProdutoDTO dto)
+        public async Task EditarProduto(int id, ProdutoRequest produtoRequest)
         {
             var produto = await _produtoRepository.BuscarPorId(id);
 
             if (produto == null)
                 throw new KeyNotFoundException();
 
-            produto.Nome = dto.Nome;
+            produto.Nome = produtoRequest.Nome;
 
             var erros = ValidadorEntidade.Validar(produto);
             if (erros.Any())

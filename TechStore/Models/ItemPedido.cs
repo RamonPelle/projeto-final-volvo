@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using TechStore.Models;
 namespace TechStore.Models
 {
 
@@ -17,12 +16,9 @@ namespace TechStore.Models
         [Column(TypeName = "decimal(8,2)")] // Define max 999.999,99
         [Required]
         public decimal PrecoUnitario { get; set; }
-
-        [ForeignKey("PedidoId")]
         public int PedidoId { get; set; }
-
-        [ForeignKey("ProdutoId")]
+        public Pedido Pedido { get; set; } = null!;
         public int ProdutoId { get; set; }
-
+        public Produto Produto { get; set; } = null!;
     }
 }

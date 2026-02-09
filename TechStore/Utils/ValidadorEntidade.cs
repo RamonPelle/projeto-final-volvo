@@ -8,7 +8,7 @@ namespace TechStore.Utils
         {
             var erros = new List<ValidationResult>();
             Validator.TryValidateObject(entidade, new ValidationContext(entidade), erros, validateAllProperties: true);
-           
+
             return erros;
         }
     }
