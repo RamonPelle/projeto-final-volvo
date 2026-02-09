@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.DTOs.Request;
+using System.ComponentModel.DataAnnotations;
 
 namespace TechStore.Controllers.api
 {
@@ -41,9 +42,9 @@ namespace TechStore.Controllers.api
                 await _produtoService.DeletarProduto(id);
                 return NoContent();
             }
-            catch (KeyNotFoundException)
+            catch (KeyNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
             catch (ArgumentException ex)
             {
@@ -85,9 +86,13 @@ namespace TechStore.Controllers.api
                 await _produtoService.EditarProduto(id, produtoRequest);
                 return NoContent();
             }
-            catch (KeyNotFoundException)
+            catch (ValidationException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (ArgumentException ex)
             {

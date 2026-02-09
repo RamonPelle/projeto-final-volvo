@@ -9,10 +9,12 @@ namespace TechStore.Services.api
     public class ProdutoService
     {
         private readonly ProdutoRepository _produtoRepository;
+        private readonly CategoriaRepository _categoriaRepository;
 
-        public ProdutoService(ProdutoRepository produtoRepository)
+        public ProdutoService(ProdutoRepository produtoRepository, CategoriaRepository categoriaRepository)
         {
             _produtoRepository = produtoRepository;
+            _categoriaRepository = categoriaRepository;
         }
 
         public async Task<List<Produto>> ObterTodosProdutos()
@@ -59,6 +61,11 @@ namespace TechStore.Services.api
 
             if (produto == null)
                 throw new KeyNotFoundException();
+
+            var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
+
+            if (categoria == null)
+                throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
 
             produto.Nome = produtoRequest.Nome;
             produto.Preco = produtoRequest.Preco;
