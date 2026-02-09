@@ -15,9 +15,9 @@ namespace TechStore.Services.api
             _produtoRepository = produtoRepository;
         }
 
-        public async Task<List<Produto>> ObterTodosProdutos()
+        public async Task<List<Produto>> ObterTodosProdutos(int skip, int take)
         {
-            return await _produtoRepository.BuscarTodos();
+            return await _produtoRepository.BuscarTodos(skip, take);
         }
 
         public async Task<Produto?> BuscarProdutoPorId(int id)

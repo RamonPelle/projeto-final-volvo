@@ -8,8 +8,8 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public ProdutoRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Produto>> BuscarTodos()
-            => await _context.Produtos.ToListAsync();
+        public async Task<List<Produto>> BuscarTodos(int skip, int take)
+            => await _context.Produtos.Skip(skip).Take(take).ToListAsync();
 
         public async Task<Produto?> BuscarPorId(int id)
         {

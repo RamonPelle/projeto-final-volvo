@@ -16,9 +16,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Produto>>> GetProdutos()
+        public async Task<ActionResult<List<Produto>>> GetProdutos([FromQuery] int skip = 0, [FromQuery] int take = 10)
         {
-            var produtos = await _produtoService.ObterTodosProdutos();
+            var produtos = await _produtoService.ObterTodosProdutos(skip, take);
             return Ok(produtos);
         }
 
