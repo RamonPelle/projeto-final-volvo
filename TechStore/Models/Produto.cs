@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TechStore.Models;
+using System.ComponentModel;
 
 namespace TechStore.Models
 {
@@ -16,6 +16,7 @@ namespace TechStore.Models
         public string Nome { get; set; } = null!;
 
         [Column(TypeName = "decimal(8,2)")] // Define max 999.999,99
+        [DefaultValue(0)]
         public decimal Preco { get; set; }
 
         [Required]
@@ -23,6 +24,7 @@ namespace TechStore.Models
         public string Descricao { get; set; } = null!;
 
         [Required]
+        [DefaultValue(0)]
         public int Estoque { get; set; }
 
         public int CategoriaId { get; set; }
