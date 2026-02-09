@@ -3,12 +3,22 @@ using TechStore.Data;
 using Microsoft.Extensions.DependencyInjection;
 using TechStore.Services.api;
 using TechStore.Repository.api;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "TechStoreAPI", Version = "v1" });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    opt.IncludeXmlComments(xmlPath);
+});
+
 
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<CategoriaService>();
