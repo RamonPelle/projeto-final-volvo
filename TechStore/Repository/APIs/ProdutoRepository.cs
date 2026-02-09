@@ -18,7 +18,7 @@ namespace TechStore.Repository.api
 
         public async Task DeletarProduto(int id)
         {
-            await _context.Produtos.Where(p => p.Id == id).ExecuteDeleteAsync();
+            await _context.Produtos.Where(produto => produto.Id == id).ExecuteDeleteAsync();
         }
 
         public async Task Adicionar(Produto produto)
