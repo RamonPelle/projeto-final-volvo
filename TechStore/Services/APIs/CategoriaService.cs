@@ -27,6 +27,18 @@ namespace TechStore.Services.api
 
         public async Task DeletarCategoria(int id)
         {
+            var categoria = await _categoriaRepository.BuscarPorId(id);
+
+            if (categoria == null)
+            {
+                return;
+            }
+
+            if (!categoria.Produtos.Any())
+            {
+                throw new ValidationException("A categoria não pode ser removida pois possui produtos associados a ela.");
+            }
+
             await _categoriaRepository.DeletarCategoria(id);
         }
 

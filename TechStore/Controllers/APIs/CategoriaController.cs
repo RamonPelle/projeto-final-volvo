@@ -23,7 +23,7 @@ namespace TechStore.Controllers.api
             return Ok(categorias);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Categoria>> GetCategoriaPorId(int id)
         {
             var categoria = await _categoriaService.BuscarCategoriaPorId(id);
@@ -34,7 +34,7 @@ namespace TechStore.Controllers.api
             return Ok(categoria);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletarCategoria(int id)
         {
             try
@@ -72,7 +72,7 @@ namespace TechStore.Controllers.api
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> EditarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
         {
             if (!ModelState.IsValid)
