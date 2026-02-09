@@ -26,6 +26,9 @@ namespace TechStore.Controllers.api
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Produto>> BuscarProdutoPorId(int id)
         {
+            if (id <= 0)
+                return BadRequest("Id inválido. Deve ser maior que zero");
+
             var produto = await _produtoService.BuscarProdutoPorId(id);
 
             if (produto == null)
@@ -37,6 +40,9 @@ namespace TechStore.Controllers.api
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletarProduto(int id)
         {
+            if (id <= 0)
+                return BadRequest("Id inválido. Deve ser maior que zero");
+
             try
             {
                 await _produtoService.DeletarProduto(id);
@@ -64,7 +70,11 @@ namespace TechStore.Controllers.api
             try
             {
                 var novoProduto = await _produtoService.AdicionarProduto(produtoRequest);
-                return CreatedAtAction(nameof(BuscarProdutos), new { id = novoProduto.Id }, novoProduto);
+                return CreatedAtAction(
+                    nameof(BuscarProdutoPorId),
+                    new { id = novoProduto.Id },
+                    novoProduto
+                );
             }
             catch (ArgumentException ex)
             {
@@ -79,6 +89,12 @@ namespace TechStore.Controllers.api
         [HttpPut("{id:int}")]
         public async Task<IActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
+            if (id <= 0)
+                return BadRequest("Id inválido. Deve ser maior que zero");
+
+            if (produtoRequest == null)
+                return BadRequest("Corpo da requisição não pode ser nulo.");
+
             if (!ModelState.IsValid)
             {
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
