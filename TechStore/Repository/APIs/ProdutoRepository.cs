@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using TechStore.Models;
+using Microsoft.EntityFrameworkCore;
 namespace TechStore.Repository.api
 {
     public class ProdutoRepository
@@ -8,8 +8,27 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public ProdutoRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Produto>> BuscarTodos()
-            => await _context.Produtos.ToListAsync();
+        public async Task<List<Produto>> BuscarTodos(string? nome, decimal? precoMin, decimal? precoMax)
+        {
+            IQueryable<Produto> query = _context.Produtos;
+
+            if (!string.IsNullOrEmpty(nome))
+            {
+                query = query.Where(p => p.Nome.Contains(nome));
+            }
+
+            if (precoMin.HasValue)
+            {
+                query = query.Where(p => p.Preco >= precoMin.Value);
+            }
+
+            if (precoMax.HasValue)
+            {
+                query = query.Where(p => p.Preco <= precoMax.Value);
+            }
+
+            return await query.ToListAsync();
+        }
 
         public async Task<Produto?> BuscarPorId(int id)
         {
@@ -18,16 +37,16 @@ namespace TechStore.Repository.api
 
         public async Task DeletarProduto(int id)
         {
-            await _context.Produtos.Where(p => p.Id == id).ExecuteDeleteAsync();
+            await _context.Produtos.Where(produto => produto.Id == id).ExecuteDeleteAsync();
         }
 
-        public async Task Adicionar(Produto produto)
+        public async Task AdicionarProduto(Produto produto)
         {
             await _context.Produtos.AddAsync(produto);
             await _context.SaveChangesAsync();
         }
 
-        public async Task EditarProduto(Produto produto)
+        public async Task AtualizarProduto(Produto produto)
         {
             _context.Produtos.Update(produto);
             await _context.SaveChangesAsync();
