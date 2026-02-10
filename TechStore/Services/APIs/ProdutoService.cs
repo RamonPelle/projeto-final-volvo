@@ -56,7 +56,7 @@ namespace TechStore.Services.api
 
         public async Task<Produto> AdicionarProduto(ProdutoRequest produtoRequest)
         {
-            var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
+            var categoria = await _categoriaRepository.BuscarCategoriaPorId(produtoRequest.CategoriaId);
 
             if (categoria == null)
                 throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
@@ -82,7 +82,7 @@ namespace TechStore.Services.api
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
 
-            var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
+            var categoria = await _categoriaRepository.BuscarCategoriaPorId(produtoRequest.CategoriaId);
 
             if (categoria == null)
                 throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
