@@ -2,6 +2,7 @@ using TechStore.Models;
 using TechStore.Repository.api;
 using TechStore.DTOs.Request;
 using TechStore.Models.Enums;
+using TechStore.DTOs.Response;
 
 namespace TechStore.Services.api
 {
@@ -61,6 +62,11 @@ namespace TechStore.Services.api
                 await AdicionarItens(novoPedido, pedidoRequest.Itens);
 
             return novoPedido;
+        }
+
+        public async Task<IEnumerable<ValorPorCategoriaResponse>> ObterValorTotalVendidoPorCategoria()
+        {
+            return await _pedidoRepository.ObterValorTotalVendidoPorCategoria();
         }
 
         private async Task AdicionarItens(

@@ -149,5 +149,11 @@ namespace TechStore.Controllers.api
             }
         }
 
+        [HttpGet("valorTotalVendidoPorCategoria")]
+        public async Task<ActionResult<IEnumerable<ValorPorCategoriaResponse>>> GetValorTotalVendidoPorCategoria()
+        {
+            var resultado = await _pedidoService.ObterValorTotalVendidoPorCategoria();
+            return Ok(resultado);
+        }
     }
 }
