@@ -20,7 +20,7 @@ namespace TechStore.Models
         public string Email { get; set; } = null!;
 
         [Required]
-        public string PasswordHash { get; set; } = null!;
+        public string SenhaEncriptada { get; set; } = null!;
 
         [Required]
         [MaxLength(20)]

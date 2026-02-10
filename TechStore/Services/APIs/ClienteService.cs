@@ -38,7 +38,7 @@ namespace TechStore.Services.api
             }
 
             var cliente = _mapper.Map<Cliente>(request);
-            cliente.PasswordHash = _SenhaService.EncriptaSenha(request.Senha);
+            cliente.SenhaEncriptada = _SenhaService.EncriptaSenha(request.Senha);
 
             var erros = ValidadorEntidade.Validar(cliente);
             if (erros.Any())
