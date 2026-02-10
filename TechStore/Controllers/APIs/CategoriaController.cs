@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Response;
 
 namespace TechStore.Controllers.api
 {
@@ -17,83 +18,42 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Categoria>>> GetCategorias()
+        public async Task<ActionResult<List<CategoriaResponse>>> BuscarCategorias()
         {
             var categorias = await _categoriaService.ObterTodasCategorias();
             return Ok(categorias);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Categoria>> GetCategoriaPorId(int id)
+        public async Task<ActionResult<CategoriaResponse>> BuscarCategoriaPorId(int id)
         {
             var categoria = await _categoriaService.BuscarCategoriaPorId(id);
-
-            if (categoria == null)
-                return NotFound();
-
             return Ok(categoria);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeletarCategoria(int id)
         {
-            try
-            {
-                await _categoriaService.DeletarCategoria(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _categoriaService.DeletarCategoria(id);
+            return NoContent();
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostCategoria([FromBody] CategoriaRequest categoriaRequest)
+        public async Task<ActionResult> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
-                return BadRequest(errorMessages);
-            }
-
-            try
-            {
-                var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaRequest);
-                return CreatedAtAction(nameof(GetCategorias), new { id = novaCategoria.Id }, novaCategoria);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaRequest);
+            return CreatedAtAction(
+                nameof(BuscarCategorias),
+                new { id = novaCategoria.Id },
+                novaCategoria
+            );
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
+        public async Task<ActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
-                return BadRequest(errorMessages);
-            }
-
-            try
-            {
-                await _categoriaService.EditarCategoria(id, categoriaRequest);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _categoriaService.AtualizarCategoria(id, categoriaRequest);
+            return NoContent();
         }
 
     }

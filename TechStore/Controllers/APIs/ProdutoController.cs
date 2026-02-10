@@ -17,9 +17,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Produto>>> BuscarProdutos([FromQuery] string? nome, [FromQuery] decimal? precoMin, [FromQuery] decimal? precoMax)
+        public async Task<ActionResult<List<Produto>>> BuscarProdutos([FromQuery] int skip = 0, [FromQuery] int take = 10, [FromQuery] string? nome = null, [FromQuery] decimal? precoMin = null, [FromQuery] decimal? precoMax = null)
         {
-            var produtos = await _produtoService.ObterTodosProdutos(nome, precoMin, precoMax);
+            var produtos = await _produtoService.ObterTodosProdutos(skip, take, nome, precoMin, precoMax);
             return Ok(produtos);
         }
 
