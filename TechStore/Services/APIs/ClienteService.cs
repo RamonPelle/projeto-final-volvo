@@ -27,7 +27,11 @@ namespace TechStore.Services.api
 
         public async Task<Cliente> AdicionarCliente(ClienteRequest request)
         {
-            var clienteExistente = await _clienteRepository.BuscarPorEmail(request.Email);
+            if (request == null)
+                throw new ArgumentNullException(nameof(request), "Dados do cliente não podem ser nulos.");
+
+            var clienteExistente = await _clienteRepository.BuscarClientePorEmail(request.Email);
+
             if (clienteExistente != null)
             {
                 throw new ValidationException("Este e-mail já está em uso.");
@@ -42,29 +46,29 @@ namespace TechStore.Services.api
                 throw new ValidationException(string.Join("; ", erros));
             }
 
-            await _clienteRepository.Adicionar(cliente);
+            await _clienteRepository.AdicionarCliente(cliente);
             return cliente;
         }
 
         public async Task<List<Cliente>> ObterTodosClientes()
         {
-            return await _clienteRepository.BuscarTodos();
+            return await _clienteRepository.BuscarTodosClientes();
         }
 
         public async Task<Cliente?> BuscarClientePorId(int id)
         {
-            return await _clienteRepository.BuscarPorId(id);
+            return await _clienteRepository.BuscarClientePorId(id);
         }
 
         public async Task DeletarCliente(int id)
         {
 
-            var cliente = await _clienteRepository.BuscarPorId(id);
+            var cliente = await _clienteRepository.BuscarClientePorId(id);
 
             if (cliente == null)
                 throw new KeyNotFoundException($"Cliente com id {id} não encontrado.");
 
-            await _clienteRepository.Deletar(id);
+            await _clienteRepository.DeletarCliente(id);
         }
 
         public async Task AtualizarCliente(int id, ClienteEditarRequest clienteUpdate)
@@ -72,12 +76,13 @@ namespace TechStore.Services.api
             if (clienteUpdate == null)
                 throw new ArgumentNullException(nameof(clienteUpdate), "Dados de atualização do cliente não podem ser nulos.");
 
-            var clienteExistente = await _clienteRepository.BuscarPorId(id);
+            var clienteExistente = await _clienteRepository.BuscarClientePorId(id);
 
             if (clienteExistente == null)
                 throw new KeyNotFoundException($"Cliente com id {id} não encontrado.");
 
-            var clienteComNovoEmail = await _clienteRepository.BuscarPorEmail(clienteUpdate.Email);
+            var clienteComNovoEmail = await _clienteRepository.BuscarClientePorEmail(clienteUpdate.Email);
+
             if (clienteComNovoEmail != null && clienteComNovoEmail.Id != id)
             {
                 throw new ValidationException("Este e-mail já está em uso por outra conta.");
@@ -89,7 +94,7 @@ namespace TechStore.Services.api
             if (erros.Any())
                 throw new ValidationException(string.Join("; ", erros));
 
-            await _clienteRepository.Atualizar(clienteExistente);
+            await _clienteRepository.AtualizarCliente(clienteExistente);
         }
     }
 }

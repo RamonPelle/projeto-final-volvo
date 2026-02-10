@@ -16,8 +16,8 @@ namespace TechStore.Controllers.api
             _clienteService = clienteService;
         }
 
-        [HttpPost("registrar")]
-        public async Task<ActionResult> Registrar([FromBody] ClienteRequest request)
+        [HttpPost]
+        public async Task<ActionResult> AdicionarCliente([FromBody] ClienteRequest request)
         {
             var cliente = await _clienteService.AdicionarCliente(request);
             return CreatedAtAction(
@@ -49,7 +49,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditarCliente(int id, [FromBody] ClienteEditarRequest request)
+        public async Task<ActionResult> AtualizarCliente(int id, [FromBody] ClienteEditarRequest request)
         {
             await _clienteService.AtualizarCliente(id, request);
             return NoContent();
