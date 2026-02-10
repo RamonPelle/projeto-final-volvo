@@ -61,7 +61,7 @@ namespace TechStore.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("SenhaEncriptada")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

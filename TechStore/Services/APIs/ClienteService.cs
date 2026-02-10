@@ -25,20 +25,20 @@ namespace TechStore.Services.api
             _mapper = mapper;
         }
 
-        public async Task<Cliente> AdicionarCliente(ClienteRequest request)
+        public async Task<Cliente> AdicionarCliente(ClienteRequest clienteRequest)
         {
-            if (request == null)
-                throw new ArgumentNullException(nameof(request), "Dados do cliente não podem ser nulos.");
+            if (clienteRequest == null)
+                throw new ArgumentNullException(nameof(clienteRequest), "Dados do cliente não podem ser nulos.");
 
-            var clienteExistente = await _clienteRepository.BuscarClientePorEmail(request.Email);
+            var clienteExistente = await _clienteRepository.BuscarClientePorEmail(clienteRequest.Email);
 
             if (clienteExistente != null)
             {
                 throw new ValidationException("Este e-mail já está em uso.");
             }
 
-            var cliente = _mapper.Map<Cliente>(request);
-            cliente.PasswordHash = _SenhaService.EncriptaSenha(request.Senha);
+            var cliente = _mapper.Map<Cliente>(clienteRequest);
+            cliente.SenhaEncriptada = _SenhaService.EncriptaSenha(clienteRequest.Senha);
 
             var erros = ValidadorEntidade.Validar(cliente);
             if (erros.Any())
