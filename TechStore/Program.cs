@@ -4,6 +4,8 @@ using TechStore.Services.api;
 using TechStore.Repository.api;
 using TechStore.Middlewares;
 using AutoMapper;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,15 @@ builder.Services.AddDbContext<TechStoreContext>(options =>
     options.UseSqlServer(connectionString));
 
 var app = builder.Build();
+
+// Configuração de cultura para resolver problema de validação de decimal
+var supportedCultures = new[] { new CultureInfo("en-US") };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en-US"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 
 // Swagger
 if (app.Environment.IsDevelopment())

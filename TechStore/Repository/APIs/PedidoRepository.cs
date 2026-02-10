@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using TechStore.Models;
 using TechStore.Models.Enums;
-
+using TechStore.DTOs.Response;
 namespace TechStore.Repository.api
 {
     public class PedidoRepository
@@ -64,6 +64,29 @@ namespace TechStore.Repository.api
         {
             _context.Pedidos.Update(pedido);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ValorPorCategoriaResponse>> ObterValorTotalVendidoPorCategoria()
+        {
+            return await _context.ItensPedido
+                .Include(i => i.Pedido)
+                .Where(i => i.Pedido.Status == StatusPedido.Concluido)
+                .Include(i => i.Produto)
+                .GroupBy(i => i.Produto.CategoriaId)
+                .Select(g => new
+                {
+                    CategoriaId = g.Key,
+                    ValorTotal = g.Sum(i => i.Quantidade * i.PrecoUnitario)
+                })
+                .Join(_context.Categorias,
+                    resultado => resultado.CategoriaId,
+                    categoria => categoria.Id,
+                    (resultado, categoria) => new ValorPorCategoriaResponse
+                    {
+                        Categoria = categoria.Nome,
+                        ValorTotal = resultado.ValorTotal
+                    })
+                .ToListAsync();
         }
     }
 }
