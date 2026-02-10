@@ -9,7 +9,11 @@ namespace TechStore.Repository.api
         public CategoriaRepository(TechStoreContext context) => _context = context;
 
         public async Task<List<Categoria>> BuscarTodasAsCategorias()
-            => await _context.Categorias.ToListAsync();
+        {
+            return await _context.Categorias
+                .Include(categoria => categoria.Produtos)
+                .ToListAsync();
+        }
 
         public async Task AdicionarCategoria(Categoria categoria)
         {

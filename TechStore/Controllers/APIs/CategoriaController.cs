@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Response;
 
 namespace TechStore.Controllers.api
 {
@@ -17,14 +18,14 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Categoria>>> BuscarCategorias()
+        public async Task<ActionResult<List<CategoriaResponse>>> BuscarCategorias()
         {
             var categorias = await _categoriaService.ObterTodasCategorias();
             return Ok(categorias);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Categoria>> BuscarCategoriaPorId(int id)
+        public async Task<ActionResult<CategoriaResponse>> BuscarCategoriaPorId(int id)
         {
             var categoria = await _categoriaService.BuscarCategoriaPorId(id);
             return Ok(categoria);

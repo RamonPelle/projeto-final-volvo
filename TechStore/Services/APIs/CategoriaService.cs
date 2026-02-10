@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
 using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Response;
 using TechStore.Utils;
 using AutoMapper;
 
@@ -20,9 +21,10 @@ namespace TechStore.Services.api
                     _mapper = mapper;
                 }
 
-        public async Task<List<Categoria>> ObterTodasCategorias()
+        public async Task<List<CategoriaResponse>> ObterTodasCategorias()
         {
-            return await _categoriaRepository.BuscarTodasAsCategorias();
+            var categorias = await _categoriaRepository.BuscarTodasAsCategorias();
+            return _mapper.Map<List<CategoriaResponse>>(categorias);
         }
 
         public async Task<Categoria?> BuscarCategoriaPorId(int id)
