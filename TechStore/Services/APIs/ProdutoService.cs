@@ -23,9 +23,9 @@ namespace TechStore.Services.api
                     _mapper = mapper;
                 }
 
-        public async Task<List<Produto>> ObterTodosProdutos()
+        public async Task<List<Produto>> ObterTodosProdutos(string? nome, decimal? precoMin, decimal? precoMax)
         {
-            return await _produtoRepository.BuscarTodos();
+            return await _produtoRepository.BuscarTodos(nome, precoMin, precoMax);
         }
 
         public async Task<Produto?> BuscarProdutoPorId(int id)
