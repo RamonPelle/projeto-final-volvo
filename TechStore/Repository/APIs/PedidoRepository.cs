@@ -10,7 +10,7 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public PedidoRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Pedido>> BuscarTodos(int? clienteId, StatusPedido? status)
+        public async Task<List<Pedido>> BuscarTodosOsPedidos(int? clienteId, StatusPedido? status)
         {
             IQueryable<Pedido> query = _context.Pedidos;
 
@@ -27,7 +27,7 @@ namespace TechStore.Repository.api
             return await query.Include(p => p.Itens).ToListAsync();
         }
 
-        public async Task<Pedido?> BuscarPorId(int id)
+        public async Task<Pedido?> BuscarPedidoPorId(int id)
         {
             return await _context.Pedidos.Include(p => p.Itens).FirstOrDefaultAsync(i => i.Id == id);
         }

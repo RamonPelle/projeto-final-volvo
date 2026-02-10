@@ -19,9 +19,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<PedidoResponse>>> GetPedidosPorCliente([FromQuery] int clienteId, [FromQuery] StatusPedido status)
+        public async Task<ActionResult<List<PedidoResponse>>> BuscarPedidosPorCliente([FromQuery] int clienteId, [FromQuery] StatusPedido status)
         {
-            var pedidos = await _pedidoService.ObterPedidos(clienteId, status);
+            var pedidos = await _pedidoService.BuscarTodosOsPedidos(clienteId, status);
 
             var resposta = pedidos.Select(p => new PedidoResponse
             {
@@ -38,7 +38,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<PedidoResponse>> GetPedidoPorId(int id)
+        public async Task<ActionResult<PedidoResponse>> BuscarPedidoPorId(int id)
         {
             var pedido = await _pedidoService.BuscarPedidoPorId(id);
 
@@ -81,7 +81,7 @@ namespace TechStore.Controllers.api
                 };
 
                 return CreatedAtAction(
-                    nameof(GetPedidoPorId),
+                    nameof(BuscarPedidoPorId),
                     new { id = pedido.Id },
                     resposta
                 );

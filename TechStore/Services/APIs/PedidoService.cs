@@ -28,14 +28,14 @@ namespace TechStore.Services.api
                 ?? throw new ArgumentNullException(nameof(produtoRepository));
         }
 
-        public async Task<List<Pedido>> ObterPedidos(int? clienteId, StatusPedido? status)
+        public async Task<List<Pedido>> BuscarTodosOsPedidos(int? clienteId, StatusPedido? status)
         {
-            return await _pedidoRepository.BuscarTodos(clienteId, status);
+            return await _pedidoRepository.BuscarTodosOsPedidos(clienteId, status);
         }
 
         public async Task<Pedido?> BuscarPedidoPorId(int id)
         {
-            return await _pedidoRepository.BuscarPorId(id);
+            return await _pedidoRepository.BuscarPedidoPorId(id);
         }
 
         public async Task<Pedido> CriarPedido(PedidoRequest pedidoRequest)
@@ -110,7 +110,7 @@ namespace TechStore.Services.api
 
         public async Task DeletarPedido(int id)
         {
-            var pedido = await _pedidoRepository.BuscarPorId(id);
+            var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
 
             if (pedido == null)
                 throw new KeyNotFoundException("Pedido não encontrado.");
@@ -147,7 +147,7 @@ namespace TechStore.Services.api
             if (PedidoEditarDto == null)
                 throw new ArgumentNullException(nameof(PedidoEditarDto));
 
-            var pedido = await _pedidoRepository.BuscarPorId(id);
+            var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
 
             if (pedido == null)
                 throw new KeyNotFoundException("Pedido não encontrado.");
