@@ -5,94 +5,55 @@ using TechStore.DTOs.Request;
 
 namespace TechStore.Controllers.api
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ProdutoController : ControllerBase
     {
         private readonly ProdutoService _produtoService;
+
         public ProdutoController(ProdutoService produtoService)
         {
             _produtoService = produtoService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Produto>>> GetProdutos([FromQuery] int skip = 0, [FromQuery] int take = 10)
+        public async Task<ActionResult<List<Produto>>> BuscarProdutos([FromQuery] int skip = 0, [FromQuery] int take = 10, [FromQuery] string? nome = null, [FromQuery] decimal? precoMin = null, [FromQuery] decimal? precoMax = null)
         {
-            var produtos = await _produtoService.ObterTodosProdutos(skip, take);
+            var produtos = await _produtoService.ObterTodosProdutos(skip, take, nome, precoMin, precoMax);
             return Ok(produtos);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Produto>> GetProdutoPorId(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Produto>> BuscarProdutoPorId(int id)
         {
             var produto = await _produtoService.BuscarProdutoPorId(id);
-
-            if (produto == null)
-                return NotFound();
-
             return Ok(produto);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletarProduto(int id)
         {
-            try
-            {
-                await _produtoService.DeletarProduto(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _produtoService.DeletarProduto(id);
+            return NoContent();
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostProduto([FromBody] ProdutoRequest produtoRequest)
+        public async Task<ActionResult> AdicionarProduto([FromBody] ProdutoRequest produtoRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
-                return BadRequest(errorMessages);
-            }
+            var produto = await _produtoService.AdicionarProduto(produtoRequest);
 
-            try
-            {
-                var novoProduto = await _produtoService.AdicionarProduto(produtoRequest);
-                return CreatedAtAction(nameof(GetProdutos), new { id = novoProduto.Id }, novoProduto);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return CreatedAtAction(
+                nameof(BuscarProdutoPorId),
+                new { id = produto.Id },
+                produto
+            );
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
-            if (!ModelState.IsValid)
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors);
-                return BadRequest(errorMessages);
-            }
-
-            try
-            {
-                await _produtoService.EditarProduto(id, produtoRequest);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _produtoService.AtualizarProduto(id, produtoRequest);
+            return NoContent();
         }
     }
 }
