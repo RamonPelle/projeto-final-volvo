@@ -1,6 +1,7 @@
 using AutoMapper;
 using TechStore.Models;
 using TechStore.Models.DTOs.Response;
+using TechStore.DTOs.Request;
 
 namespace TechStore.Mappings
 {
@@ -8,8 +9,12 @@ namespace TechStore.Mappings
     {
         public CategoriaProfile()
         {
+            // GET
             CreateMap<Categoria, CategoriaResponse>();
             CreateMap<Produto, ProdutoResponse>();
+
+            // POST / PUT
+            CreateMap<CategoriaRequest, Categoria>();
         }
     }
 }
