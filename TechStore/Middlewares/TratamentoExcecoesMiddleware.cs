@@ -37,8 +37,7 @@ namespace TechStore.Middlewares
 
             switch (excecao)
             {
-                case ArgumentException:
-                case ValidationException:
+                case ArgumentException or ValidationException:
                     statusCode = HttpStatusCode.BadRequest;
                     mensagem = excecao.Message;
                     break;
