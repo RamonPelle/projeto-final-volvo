@@ -13,7 +13,7 @@ namespace TechStore.DTOs.Request
             typeof(decimal),
             "0.00",
             "9999999999999999.99",
-            ErrorMessage = "O preço não pode ser negativo, e nem possuir mais do que 16 dígitos."
+            ErrorMessage = "O preço não pode ser negativo, nem possuir mais do que 16 dígitos."
         )]
         public decimal Preco { get; set; }
 
