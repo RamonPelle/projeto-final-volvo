@@ -31,7 +31,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeletarProduto(int id)
+        public async Task<ActionResult> DeletarProduto(int id)
         {
             await _produtoService.DeletarProduto(id);
             return NoContent();
@@ -50,7 +50,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
+        public async Task<ActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
             await _produtoService.AtualizarProduto(id, produtoRequest);
             return NoContent();

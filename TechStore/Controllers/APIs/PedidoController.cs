@@ -93,7 +93,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> EditarPedido(int id, [FromBody] PedidoEditarRequest pedidoEditarRequest)
+        public async Task<ActionResult> EditarPedido(int id, [FromBody] PedidoEditarRequest pedidoEditarRequest)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -114,7 +114,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeletarPedido(int id)
+        public async Task<ActionResult> DeletarPedido(int id)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}/item/{itemid:int}")]
-        public async Task<IActionResult> DeletarItem(int id, int itemId)
+        public async Task<ActionResult> DeletarItem(int id, int itemId)
         {
             try
             {

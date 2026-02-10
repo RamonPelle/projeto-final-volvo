@@ -35,7 +35,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeletarCategoria(int id)
+        public async Task<ActionResult> DeletarCategoria(int id)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> EditarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
+        public async Task<ActionResult> EditarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
         {
             if (!ModelState.IsValid)
             {
