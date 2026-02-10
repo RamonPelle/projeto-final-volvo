@@ -32,7 +32,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeletarCategoria(int id)
+        public async Task<ActionResult> DeletarCategoria(int id)
         {
             await _categoriaService.DeletarCategoria(id);
             return NoContent();
@@ -50,7 +50,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
+        public async Task<ActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
         {
             await _categoriaService.AtualizarCategoria(id, categoriaRequest);
             return NoContent();
