@@ -19,14 +19,14 @@ namespace TechStore.Repository.api
 
         public async Task<Categoria?> BuscarCategoriaPorId(int id)
         {
-            return await _context.Categorias.Include(p => p.Produtos).FirstOrDefaultAsync(c =>
-                    c.Id == id
+            return await _context.Categorias.Include(produto => produto.Produtos).FirstOrDefaultAsync(categoria =>
+                    categoria.Id == id
                 );
         }
 
         public async Task DeletarCategoria(int id)
         {
-            await _context.Categorias.Where(c => c.Id == id).ExecuteDeleteAsync();
+            await _context.Categorias.Where(categoria => categoria.Id == id).ExecuteDeleteAsync();
         }
 
         public async Task AtualizarCategoria(Categoria categoria)
