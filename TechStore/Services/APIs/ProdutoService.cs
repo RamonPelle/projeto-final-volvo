@@ -17,15 +17,15 @@ namespace TechStore.Services.api
             ProdutoRepository produtoRepository,
             CategoriaRepository categoriaRepository,
             IMapper mapper)
-                {
-                    _produtoRepository = produtoRepository;
-                    _categoriaRepository = categoriaRepository;
-                    _mapper = mapper;
-                }
-
-        public async Task<List<Produto>> ObterTodosProdutos(string? nome, decimal? precoMin, decimal? precoMax)
         {
-            return await _produtoRepository.BuscarTodos(nome, precoMin, precoMax);
+            _produtoRepository = produtoRepository;
+            _categoriaRepository = categoriaRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<List<Produto>> ObterTodosProdutos(int skip, int take, string? nome, decimal? precoMin, decimal? precoMax)
+        {
+            return await _produtoRepository.BuscarTodos(skip, take, nome, precoMin, precoMax);
         }
 
         public async Task<Produto?> BuscarProdutoPorId(int id)
