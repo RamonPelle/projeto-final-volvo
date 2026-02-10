@@ -11,7 +11,7 @@ namespace TechStore.Repository.api
         public async Task<List<Categoria>> BuscarTodos()
             => await _context.Categorias.ToListAsync();
 
-        public async Task Adicionar(Categoria categoria)
+        public async Task AdicionarCategoria(Categoria categoria)
         {
             await _context.Categorias.AddAsync(categoria);
             await _context.SaveChangesAsync();
@@ -29,7 +29,7 @@ namespace TechStore.Repository.api
             await _context.Categorias.Where(c => c.Id == id).ExecuteDeleteAsync();
         }
 
-        public async Task EditarCategoria(Categoria categoria)
+        public async Task AtualizarCategoria(Categoria categoria)
         {
             _context.Categorias.Update(categoria);
             await _context.SaveChangesAsync();

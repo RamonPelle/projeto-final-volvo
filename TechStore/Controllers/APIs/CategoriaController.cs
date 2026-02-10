@@ -17,14 +17,14 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Categoria>>> GetCategorias()
+        public async Task<ActionResult<List<Categoria>>> BuscarCategorias()
         {
             var categorias = await _categoriaService.ObterTodasCategorias();
             return Ok(categorias);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Categoria>> GetCategoriaPorId(int id)
+        public async Task<ActionResult<Categoria>> BuscarCategoriaPorId(int id)
         {
             var categoria = await _categoriaService.BuscarCategoriaPorId(id);
 
@@ -53,7 +53,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostCategoria([FromBody] CategoriaRequest categoriaRequest)
+        public async Task<ActionResult> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace TechStore.Controllers.api
             try
             {
                 var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaRequest);
-                return CreatedAtAction(nameof(GetCategorias), new { id = novaCategoria.Id }, novaCategoria);
+                return CreatedAtAction(nameof(BuscarCategorias), new { id = novaCategoria.Id }, novaCategoria);
             }
             catch (ArgumentException ex)
             {
@@ -73,7 +73,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> EditarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
+        public async Task<IActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace TechStore.Controllers.api
 
             try
             {
-                await _categoriaService.EditarCategoria(id, categoriaRequest);
+                await _categoriaService.AtualizarCategoria(id, categoriaRequest);
                 return NoContent();
             }
             catch (KeyNotFoundException)

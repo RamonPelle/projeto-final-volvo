@@ -61,11 +61,11 @@ namespace TechStore.Services.api
                 throw new ValidationException(string.Join("; ", erros));
             }
 
-            await _categoriaRepository.Adicionar(categoria);
+            await _categoriaRepository.AdicionarCategoria(categoria);
             return categoria;
         }
 
-        public async Task EditarCategoria(int id, CategoriaRequest dto)
+        public async Task AtualizarCategoria(int id, CategoriaRequest dto)
         {
             var categoria = await _categoriaRepository.BuscarPorId(id);
 
@@ -78,7 +78,7 @@ namespace TechStore.Services.api
             if (erros.Any())
                 throw new ValidationException(string.Join("; ", erros));
 
-            await _categoriaRepository.EditarCategoria(categoria);
+            await _categoriaRepository.AtualizarCategoria(categoria);
         }
 
     }
