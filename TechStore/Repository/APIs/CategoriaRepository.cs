@@ -8,7 +8,7 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public CategoriaRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Categoria>> BuscarTodos()
+        public async Task<List<Categoria>> BuscarTodasAsCategorias()
             => await _context.Categorias.ToListAsync();
 
         public async Task AdicionarCategoria(Categoria categoria)
@@ -17,7 +17,7 @@ namespace TechStore.Repository.api
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Categoria?> BuscarPorId(int id)
+        public async Task<Categoria?> BuscarCategoriaPorId(int id)
         {
             return await _context.Categorias.Include(p => p.Produtos).FirstOrDefaultAsync(c =>
                     c.Id == id
