@@ -19,7 +19,7 @@ namespace TechStore.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "PasswordHash",
+                name: "SenhaEncriptada",
                 table: "Clientes",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -63,7 +63,7 @@ namespace TechStore.Migrations
                 table: "Clientes");
 
             migrationBuilder.DropColumn(
-                name: "PasswordHash",
+                name: "SenhaEncriptada",
                 table: "Clientes");
 
             migrationBuilder.DropColumn(

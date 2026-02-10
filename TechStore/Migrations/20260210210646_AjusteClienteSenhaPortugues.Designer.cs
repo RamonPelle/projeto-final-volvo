@@ -12,8 +12,8 @@ using TechStore.Data;
 namespace TechStore.Migrations
 {
     [DbContext(typeof(TechStoreContext))]
-    [Migration("20260210024334_AjusteCliente")]
-    partial class AjusteCliente
+    [Migration("20260210210646_AjusteClienteSenhaPortugues")]
+    partial class AjusteClienteSenhaPortugues
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
