@@ -17,9 +17,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
-        public async Task<ActionResult> AdicionarCliente([FromBody] ClienteRequest request)
+        public async Task<ActionResult> AdicionarCliente([FromBody] ClienteRequest clienteRequest)
         {
-            var cliente = await _clienteService.AdicionarCliente(request);
+            var cliente = await _clienteService.AdicionarCliente(clienteRequest);
             return CreatedAtAction(
                 nameof(BuscarClientePorId),
                 new { id = cliente.Id },
