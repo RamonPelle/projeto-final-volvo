@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.Models.DTOs.Request;
 using TechStore.Models.DTOs.Response;
@@ -32,14 +31,14 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeletarCategoria(int id)
+        public async Task<IActionResult> DeletarCategoria(int id)
         {
             await _categoriaService.DeletarCategoria(id);
             return NoContent();
         }
 
         [HttpPost]
-        public async Task<ActionResult> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
+        public async Task<IActionResult> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
         {
             var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaRequest);
             return CreatedAtAction(
@@ -50,7 +49,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
+        public async Task<IActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
         {
             await _categoriaService.AtualizarCategoria(id, categoriaRequest);
             return NoContent();
