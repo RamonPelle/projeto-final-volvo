@@ -10,7 +10,8 @@ namespace TechStore.Mappings
         public PedidoProfile()
         {
             CreateMap<Pedido, PedidoResponse>();
-            CreateMap<ItemPedido, ItemPedidoResponse>();
+            CreateMap<ItemPedido, ItemPedidoResponse>()
+                .ForMember(response => response.NomeProduto, opt => opt.MapFrom(itemPedido => itemPedido.Produto.Nome));
             CreateMap<PedidoRequest, Pedido>();
             CreateMap<ItemPedidoRequest, ItemPedido>();
         }

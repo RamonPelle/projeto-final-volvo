@@ -26,12 +26,15 @@ namespace TechStore.Repository.api
                 query = query.Where(p => p.Status == status);
             }
 
-            return await query.Include(p => p.Itens).ToListAsync();
+            return await query.Include(p => p.Itens).ThenInclude(i => i.Produto).ToListAsync();
         }
 
         public async Task<Pedido?> BuscarPedidoPorId(int id)
         {
-            return await _context.Pedidos.Include(p => p.Itens).FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Pedidos
+                                 .Include(p => p.Itens)
+                                 .ThenInclude(i => i.Produto)
+                                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Pedido?> ObterPedidoAtivoPorCliente(int clienteId)
