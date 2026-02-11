@@ -1,5 +1,6 @@
 using AutoMapper;
 using TechStore.Models;
+using TechStore.Models.DTOs.Request;
 using TechStore.Models.DTOs.Response;
 
 namespace TechStore.Mappings
@@ -10,6 +11,8 @@ namespace TechStore.Mappings
         {
             CreateMap<Pedido, PedidoResponse>();
             CreateMap<ItemPedido, ItemPedidoResponse>();
+            CreateMap<PedidoRequest, Pedido>();
+            CreateMap<ItemPedidoRequest, ItemPedido>();
         }
     }
 }

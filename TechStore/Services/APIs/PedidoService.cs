@@ -20,6 +20,7 @@ namespace TechStore.Services.api
             PedidoRepository pedidoRepository,
             ItemPedidoRepository itemPedidoRepository,
             ProdutoRepository produtoRepository,
+            ItemPedidoService itemPedidoService,
             IMapper mapper
         )
         {
@@ -34,6 +35,9 @@ namespace TechStore.Services.api
 
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
+
+            _itemPedidoService = itemPedidoService
+                ?? throw new ArgumentNullException(nameof(itemPedidoService));
         }
 
         public async Task<List<Pedido>> BuscarTodosOsPedidos(int? clienteId, StatusPedido? status)
@@ -74,7 +78,7 @@ namespace TechStore.Services.api
             return await _pedidoRepository.ObterValorTotalVendidoPorCategoria();
         }
 
-        
+
         public async Task DeletarPedido(int id)
         {
             var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
