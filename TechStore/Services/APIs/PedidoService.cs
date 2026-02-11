@@ -77,7 +77,7 @@ namespace TechStore.Services.api
             foreach (var itemPedidoRequest in itens)
             {
                 var produto =
-                    await _produtoRepository.BuscarPorId(itemPedidoRequest.ProdutoId)
+                    await _produtoRepository.BuscarProdutoPorId(itemPedidoRequest.ProdutoId)
                     ?? throw new ArgumentException(
                         $"Produto {itemPedidoRequest.ProdutoId} não encontrado."
                     );

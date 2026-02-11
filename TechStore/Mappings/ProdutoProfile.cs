@@ -1,7 +1,7 @@
 using AutoMapper;
 using TechStore.Models.DTOs.Request;
 using TechStore.Models;
-
+using TechStore.Models.DTOs.Response;
 namespace TechStore.Mappings
 {
     public class ProdutoProfile : Profile
@@ -9,6 +9,7 @@ namespace TechStore.Mappings
         public ProdutoProfile()
         {
             CreateMap<ProdutoRequest, Produto>();
+            CreateMap<Produto, ProdutoResponse>();
         }
     }
 }
