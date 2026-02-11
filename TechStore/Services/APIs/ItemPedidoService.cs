@@ -1,5 +1,5 @@
 using TechStore.Models;
-using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Request;
 using TechStore.Repository.api;
 
 namespace TechStore.Services.api
@@ -18,6 +18,45 @@ namespace TechStore.Services.api
             _itemPedidoRepository = itemPedidoRepository;
             _pedidoRepository = pedidoRepository;
             _produtoRepository = produtoRepository;
+        }
+
+        public async Task AdicionarItens(
+                    Pedido pedido,
+                    List<ItemPedidoRequest> itens
+                )
+        {
+            foreach (var itemPedidoRequest in itens)
+            {
+                var produto =
+                    await _produtoRepository.BuscarProdutoPorId(itemPedidoRequest.ProdutoId)
+                    ?? throw new ArgumentException(
+                        $"Produto {itemPedidoRequest.ProdutoId} não encontrado."
+                    );
+
+                var itemExistente =
+                    await _itemPedidoRepository.BuscarItemPorPedidoEProduto(
+                        pedido.Id,
+                        itemPedidoRequest.ProdutoId
+                    );
+
+                if (itemExistente != null)
+                {
+                    itemExistente.Quantidade += itemPedidoRequest.Quantidade;
+                    await _itemPedidoRepository.AtualizarItem(itemExistente);
+                }
+                else
+                {
+                    var novoItem = new ItemPedido
+                    {
+                        PedidoId = pedido.Id,
+                        ProdutoId = produto.Id,
+                        Quantidade = itemPedidoRequest.Quantidade,
+                        PrecoUnitario = produto.Preco
+                    };
+
+                    await _itemPedidoRepository.AdicionarItem(novoItem);
+                }
+            }
         }
 
         public async Task AdicionarItem(int pedidoId, ItemPedidoRequest itemPedidoRequest)

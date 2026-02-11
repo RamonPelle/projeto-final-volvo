@@ -1,6 +1,6 @@
 using AutoMapper;
 using TechStore.Models;
-using TechStore.DTOs.Response;
+using TechStore.Models.DTOs.Response;
 
 namespace TechStore.Mappings
 {

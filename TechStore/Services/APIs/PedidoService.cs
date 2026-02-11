@@ -74,45 +74,7 @@ namespace TechStore.Services.api
             return await _pedidoRepository.ObterValorTotalVendidoPorCategoria();
         }
 
-        private async Task AdicionarItens(
-            Pedido pedido,
-            List<ItemPedidoRequest> itens
-        )
-        {
-            foreach (var itemPedidoRequest in itens)
-            {
-                var produto =
-                    await _produtoRepository.BuscarProdutoPorId(itemPedidoRequest.ProdutoId)
-                    ?? throw new ArgumentException(
-                        $"Produto {itemPedidoRequest.ProdutoId} não encontrado."
-                    );
-
-                var itemExistente =
-                    await _itemPedidoRepository.BuscarItem(
-                        pedido.Id,
-                        itemPedidoRequest.ProdutoId
-                    );
-
-                if (itemExistente != null)
-                {
-                    itemExistente.Quantidade += itemPedidoRequest.Quantidade;
-                    await _itemPedidoRepository.AtualizarItem();
-                }
-                else
-                {
-                    var novoItem = new ItemPedido
-                    {
-                        PedidoId = pedido.Id,
-                        ProdutoId = produto.Id,
-                        Quantidade = itemPedidoRequest.Quantidade,
-                        PrecoUnitario = produto.Preco
-                    };
-
-                    await _itemPedidoRepository.AdicionarItem(novoItem);
-                }
-            }
-        }
-
+        
         public async Task DeletarPedido(int id)
         {
             var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
