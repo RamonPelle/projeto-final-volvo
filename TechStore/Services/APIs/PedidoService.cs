@@ -4,7 +4,6 @@ using TechStore.Models.DTOs.Request;
 using TechStore.Models.Enums;
 using TechStore.Models.DTOs.Response;
 using AutoMapper;
-using System.Transactions;
 
 namespace TechStore.Services.api
 {
@@ -14,16 +13,13 @@ namespace TechStore.Services.api
         private readonly ItemPedidoRepository _itemPedidoRepository;
         private readonly ProdutoRepository _produtoRepository;
         private readonly ClienteRepository _clienteRepository;
-        private readonly ItemPedidoService _itemPedidoService;
         private readonly ProdutoService _produtoService;
-
         private readonly IMapper _mapper;
 
         public PedidoService(
             PedidoRepository pedidoRepository,
             ItemPedidoRepository itemPedidoRepository,
             ProdutoRepository produtoRepository,
-            ItemPedidoService itemPedidoService,
             ClienteRepository clienteRepository,
             ProdutoService produtoService,
             IMapper mapper
@@ -44,9 +40,6 @@ namespace TechStore.Services.api
 
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
-
-            _itemPedidoService = itemPedidoService
-                ?? throw new ArgumentNullException(nameof(itemPedidoService));
         }
 
         public async Task<List<Pedido>> BuscarTodosOsPedidos(int? clienteId, StatusPedido? status)
@@ -66,6 +59,7 @@ namespace TechStore.Services.api
             if (id <= 0)
                 throw new ArgumentException("Id do pedido inválido.");
             var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
+
             if (pedido == null)
                 throw new KeyNotFoundException("Pedido não encontrado.");
 
