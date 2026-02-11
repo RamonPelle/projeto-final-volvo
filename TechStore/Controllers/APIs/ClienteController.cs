@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TechStore.Models.DTOs.Request;
 using TechStore.Services.api;
-using System.ComponentModel.DataAnnotations;
 
 namespace TechStore.Controllers.api
 {
@@ -42,14 +41,14 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeletarCliente(int id)
+        public async Task<IActionResult> DeletarCliente(int id)
         {
             await _clienteService.DeletarCliente(id);
             return NoContent();
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> AtualizarCliente(int id, [FromBody] ClienteEditarRequest request)
+        public async Task<IActionResult> AtualizarCliente(int id, [FromBody] ClienteEditarRequest request)
         {
             await _clienteService.AtualizarCliente(id, request);
             return NoContent();
