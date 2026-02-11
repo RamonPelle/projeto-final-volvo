@@ -8,13 +8,8 @@ namespace TechStore.Mappings
     {
         public PedidoProfile()
         {
-            CreateMap<Pedido, PedidoResponse>()
-                .ForMember(
-                    dest => dest.Itens,
-                    opt => opt.MapFrom(src => src.Itens)
-                );
-
-            CreateMap<ItemPedido, PedidoResponse.ItensResponse>();
+            CreateMap<Pedido, PedidoResponse>();
+            CreateMap<ItemPedido, ItemPedidoResponse>();
         }
     }
 }
