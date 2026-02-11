@@ -61,5 +61,12 @@ namespace TechStore.Controllers.api
             await _produtoService.AtualizarProduto(id, produtoRequest);
             return NoContent();
         }
+
+        [HttpPatch("{id:int}/estoque/{qtd:int}")]
+        public async Task<IActionResult> AtualizarEstoqueProdutos(int id, int qtd, [FromQuery] bool aumentar)
+        {
+            await _produtoService.AtualizarEstoqueProdutos(id, qtd, aumentar);
+            return NoContent();
+        }
     }
 }
