@@ -1,10 +1,10 @@
-namespace TechStore.Models.DTOs.Request
+namespace TechStore.DTOs.Response
 {
-    public class ItemPedidoRequest
+    public class ItemPedidoResponse
     {
-        public int PedidoId { get; set; }
         public int ProdutoId { get; set; }
         public int Quantidade { get; set; }
         public decimal PrecoUnitario { get; set; }
     }
+
 }

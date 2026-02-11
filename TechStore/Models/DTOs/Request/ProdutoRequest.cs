@@ -25,7 +25,6 @@ namespace TechStore.Models.DTOs.Request
         [Range(0, int.MaxValue, ErrorMessage = "O estoque não pode ser negativo.")]
         public int Estoque { get; set; }
 
-        //TODO trocar pelo nome da categoria?
         [Required(ErrorMessage = "A categoria é obrigatória.")]
         public int CategoriaId { get; set; }
     }

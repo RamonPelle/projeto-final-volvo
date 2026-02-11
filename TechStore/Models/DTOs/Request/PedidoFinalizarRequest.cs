@@ -3,7 +3,7 @@ using TechStore.Models.Enums;
 
 namespace TechStore.Models.DTOs.Request
 {
-    public class PedidoEditarRequest
+    public class PedidoFinalizarRequest
     {
         [Required(ErrorMessage = "O status do pedido é obrigatório.")]
         public StatusPedido Status { get; set; }
