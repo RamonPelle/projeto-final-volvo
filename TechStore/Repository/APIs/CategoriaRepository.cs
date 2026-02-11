@@ -8,28 +8,32 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public CategoriaRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Categoria>> BuscarTodos()
-            => await _context.Categorias.ToListAsync();
+        public async Task<List<Categoria>> BuscarTodasAsCategorias()
+        {
+            return await _context.Categorias
+                .Include(categoria => categoria.Produtos)
+                .ToListAsync();
+        }
 
-        public async Task Adicionar(Categoria categoria)
+        public async Task AdicionarCategoria(Categoria categoria)
         {
             await _context.Categorias.AddAsync(categoria);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Categoria?> BuscarPorId(int id)
+        public async Task<Categoria?> BuscarCategoriaPorId(int id)
         {
-            return await _context.Categorias.Include(p => p.Produtos).FirstOrDefaultAsync(c =>
-                    c.Id == id
+            return await _context.Categorias.Include(produto => produto.Produtos).FirstOrDefaultAsync(categoria =>
+                    categoria.Id == id
                 );
         }
 
         public async Task DeletarCategoria(int id)
         {
-            await _context.Categorias.Where(c => c.Id == id).ExecuteDeleteAsync();
+            await _context.Categorias.Where(categoria => categoria.Id == id).ExecuteDeleteAsync();
         }
 
-        public async Task EditarCategoria(Categoria categoria)
+        public async Task AtualizarCategoria(Categoria categoria)
         {
             _context.Categorias.Update(categoria);
             await _context.SaveChangesAsync();

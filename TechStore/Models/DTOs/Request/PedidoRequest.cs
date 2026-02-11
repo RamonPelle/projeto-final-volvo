@@ -1,4 +1,4 @@
-namespace TechStore.DTOs.Request
+namespace TechStore.Models.DTOs.Request
 {
     /// <summary>
     /// DTO para criar um novo pedido.

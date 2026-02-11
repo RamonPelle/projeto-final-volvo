@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using TechStore.Models.Enums;
 
 namespace TechStore.Models
@@ -13,8 +12,6 @@ namespace TechStore.Models
         /// Identificador único do pedido.
         /// </summary>
         /// <example>101</example>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         /// <summary>

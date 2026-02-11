@@ -11,6 +11,7 @@ using TechStore.Middlewares;
 using AutoMapper;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using TechStore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,10 @@ builder.Services.AddScoped<ProdutoService>();
 builder.Services.AddScoped<PedidoRepository>();
 builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<ItemPedidoRepository>();
+builder.Services.AddScoped<ItemPedidoService>();
+builder.Services.AddScoped<ClienteRepository>();
+builder.Services.AddScoped<SenhaService>();
+builder.Services.AddScoped<ClienteService>();
 
 // DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

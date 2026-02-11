@@ -13,8 +13,6 @@ namespace TechStore.Models
                 /// Identificador único do produto.
                 /// </summary>
                 /// <example>205</example>
-                [Key]
-                [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
                 public int Id { get; set; }
 
                 /// <summary>

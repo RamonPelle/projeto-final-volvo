@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechStore.Data;
 
@@ -11,9 +12,11 @@ using TechStore.Data;
 namespace TechStore.Migrations
 {
     [DbContext(typeof(TechStoreContext))]
-    partial class TechStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20260210024334_AjusteCliente")]
+    partial class AjusteCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,6 +123,8 @@ namespace TechStore.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
                     b.ToTable("Pedidos");
                 });
 
@@ -176,6 +181,15 @@ namespace TechStore.Migrations
                     b.Navigation("Produto");
                 });
 
+            modelBuilder.Entity("TechStore.Models.Pedido", b =>
+                {
+                    b.HasOne("TechStore.Models.Cliente", null)
+                        .WithMany("Pedidos")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TechStore.Models.Produto", b =>
                 {
                     b.HasOne("TechStore.Models.Categoria", null)
@@ -188,6 +202,11 @@ namespace TechStore.Migrations
             modelBuilder.Entity("TechStore.Models.Categoria", b =>
                 {
                     b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("TechStore.Models.Cliente", b =>
+                {
+                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("TechStore.Models.Pedido", b =>

@@ -8,7 +8,7 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public ProdutoRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Produto>> BuscarTodos(string? nome, decimal? precoMin, decimal? precoMax)
+        public async Task<List<Produto>> BuscarTodosOsProdutos(int skip, int take, string? nome, decimal? precoMin, decimal? precoMax)
         {
             IQueryable<Produto> query = _context.Produtos;
 
@@ -27,10 +27,10 @@ namespace TechStore.Repository.api
                 query = query.Where(p => p.Preco <= precoMax.Value);
             }
 
-            return await query.ToListAsync();
+            return await query.Skip(skip).Take(take).ToListAsync();
         }
 
-        public async Task<Produto?> BuscarPorId(int id)
+        public async Task<Produto?> BuscarProdutoPorId(int id)
         {
             return await _context.Produtos.FindAsync(id);
         }

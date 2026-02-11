@@ -14,8 +14,6 @@ namespace TechStore.Models
         /// ID único da categoria.
         /// </summary>
         /// <example>1</example>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         /// <summary>

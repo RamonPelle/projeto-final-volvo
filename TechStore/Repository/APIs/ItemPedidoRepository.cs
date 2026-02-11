@@ -13,12 +13,14 @@ namespace TechStore.Repository.api
             _context = context;
         }
 
-        public async Task<ItemPedido?> BuscarItem(int pedidoId, int produtoId)
+        public async Task<ItemPedido?> BuscarItemPorPedidoEProduto(
+            int pedidoId,
+            int produtoId)
         {
             return await _context.ItensPedido
-                .FirstOrDefaultAsync(i =>
-                    i.PedidoId == pedidoId &&
-                    i.ProdutoId == produtoId);
+                .FirstOrDefaultAsync(item =>
+                    item.PedidoId == pedidoId &&
+                    item.ProdutoId == produtoId);
         }
 
         public async Task<ItemPedido?> BuscarItemPorId(int itemId)
@@ -32,9 +34,15 @@ namespace TechStore.Repository.api
             await _context.SaveChangesAsync();
         }
 
-        public async Task AtualizarItem()
+        public async Task AtualizarItem(ItemPedido item)
         {
+            _context.ItensPedido.Update(item);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletarItem(int id)
+        {
+            await _context.ItensPedido.Where(item => item.Id == id).ExecuteDeleteAsync();
         }
     }
 }

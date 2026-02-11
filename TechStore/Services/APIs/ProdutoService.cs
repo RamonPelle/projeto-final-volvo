@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
 using TechStore.Utils;
-using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Request;
 using AutoMapper;
 
 namespace TechStore.Services.api
@@ -17,15 +17,15 @@ namespace TechStore.Services.api
             ProdutoRepository produtoRepository,
             CategoriaRepository categoriaRepository,
             IMapper mapper)
-                {
-                    _produtoRepository = produtoRepository;
-                    _categoriaRepository = categoriaRepository;
-                    _mapper = mapper;
-                }
-
-        public async Task<List<Produto>> ObterTodosProdutos(string? nome, decimal? precoMin, decimal? precoMax)
         {
-            return await _produtoRepository.BuscarTodos(nome, precoMin, precoMax);
+            _produtoRepository = produtoRepository;
+            _categoriaRepository = categoriaRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<List<Produto>> ObterTodosProdutos(int skip, int take, string? nome, decimal? precoMin, decimal? precoMax)
+        {
+            return await _produtoRepository.BuscarTodosOsProdutos(skip, take, nome, precoMin, precoMax);
         }
 
         public async Task<Produto?> BuscarProdutoPorId(int id)
@@ -33,7 +33,7 @@ namespace TechStore.Services.api
             if (id <= 0)
                 throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
 
-            var produto = await _produtoRepository.BuscarPorId(id);
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
 
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
@@ -46,7 +46,7 @@ namespace TechStore.Services.api
             if (id <= 0)
                 throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
 
-            var produto = await _produtoRepository.BuscarPorId(id);
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
 
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
@@ -56,7 +56,10 @@ namespace TechStore.Services.api
 
         public async Task<Produto> AdicionarProduto(ProdutoRequest produtoRequest)
         {
-            var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
+            if (produtoRequest == null)
+                throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
+
+            var categoria = await _categoriaRepository.BuscarCategoriaPorId(produtoRequest.CategoriaId);
 
             if (categoria == null)
                 throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
@@ -77,12 +80,12 @@ namespace TechStore.Services.api
             if (produtoRequest == null)
                 throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
 
-            var produto = await _produtoRepository.BuscarPorId(id);
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
 
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
 
-            var categoria = await _categoriaRepository.BuscarPorId(produtoRequest.CategoriaId);
+            var categoria = await _categoriaRepository.BuscarCategoriaPorId(produtoRequest.CategoriaId);
 
             if (categoria == null)
                 throw new ValidationException($"Categoria com id {produtoRequest.CategoriaId} não existe.");
@@ -92,6 +95,21 @@ namespace TechStore.Services.api
             var erros = ValidadorEntidade.Validar(produto);
             if (erros.Any())
                 throw new ValidationException(string.Join("; ", erros));
+
+            await _produtoRepository.AtualizarProduto(produto);
+        }
+
+        public async Task AtualizarEstoqueProdutos(int id, int quantidade)
+        {
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
+            if (produto == null) throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
+
+            produto.Estoque += quantidade;
+
+            if (produto.Estoque < 0)
+            {
+                throw new InvalidOperationException($"Quantidade solicitada para o produto {produto.Nome} excede o estoque disponível.");
+            }
 
             await _produtoRepository.AtualizarProduto(produto);
         }

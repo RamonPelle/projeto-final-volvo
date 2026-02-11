@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using TechStore.Models;
 using TechStore.Models.Enums;
-using TechStore.DTOs.Response;
+using TechStore.Models.DTOs.Response;
+using Microsoft.EntityFrameworkCore.Storage;
+
 namespace TechStore.Repository.api
 {
     public class PedidoRepository
@@ -10,7 +12,7 @@ namespace TechStore.Repository.api
         private readonly TechStoreContext _context;
         public PedidoRepository(TechStoreContext context) => _context = context;
 
-        public async Task<List<Pedido>> BuscarTodos(int? clienteId, StatusPedido? status)
+        public async Task<List<Pedido>> BuscarTodosOsPedidos(int? clienteId, StatusPedido? status)
         {
             IQueryable<Pedido> query = _context.Pedidos;
 
@@ -24,12 +26,15 @@ namespace TechStore.Repository.api
                 query = query.Where(p => p.Status == status);
             }
 
-            return await query.Include(p => p.Itens).ToListAsync();
+            return await query.Include(p => p.Itens).ThenInclude(i => i.Produto).ToListAsync();
         }
 
-        public async Task<Pedido?> BuscarPorId(int id)
+        public async Task<Pedido?> BuscarPedidoPorId(int id)
         {
-            return await _context.Pedidos.Include(p => p.Itens).FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.Pedidos
+                                 .Include(p => p.Itens)
+                                 .ThenInclude(i => i.Produto)
+                                 .FirstOrDefaultAsync(i => i.Id == id);
         }
 
         public async Task<Pedido?> ObterPedidoAtivoPorCliente(int clienteId)
@@ -60,7 +65,7 @@ namespace TechStore.Repository.api
             await _context.ItensPedido.Where(i => i.Id == id).ExecuteDeleteAsync();
         }
 
-        public async Task EditarPedido(Pedido pedido)
+        public async Task FinalizarPedido(Pedido pedido)
         {
             _context.Pedidos.Update(pedido);
             await _context.SaveChangesAsync();
@@ -87,6 +92,11 @@ namespace TechStore.Repository.api
                         ValorTotal = resultado.ValorTotal
                     })
                 .ToListAsync();
+        }
+
+        public async Task<IDbContextTransaction> IniciarTransacao()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
     }
 }
