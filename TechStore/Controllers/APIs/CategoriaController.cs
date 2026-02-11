@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.Models.DTOs.Request;
 using Swashbuckle.AspNetCore.Annotations;
@@ -47,7 +46,7 @@ namespace TechStore.Controllers.api
                 [SwaggerResponse(204, "Categoria deletada com sucesso.")]
                 [SwaggerResponse(404, "Categoria não encontrada.")]
                 [SwaggerResponse(400, "Erro de validação.")]
-                public async Task<ActionResult> DeletarCategoria(int id)
+                public async Task<IActionResult> DeletarCategoria(int id)
                 {
                         await _categoriaService.DeletarCategoria(id);
                         return NoContent();
@@ -57,7 +56,7 @@ namespace TechStore.Controllers.api
                 [SwaggerOperation(Summary = "Cria nova categoria", Description = "Adiciona uma nova categoria ao sistema. Regras de negócio: o corpo da requisição não pode ser nulo e a entidade deve ser válida conforme as anotações de validação.")]
                 [SwaggerResponse(201, "Categoria criada com sucesso.")]
                 [SwaggerResponse(400, "Erro de validação.")]
-                public async Task<ActionResult> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
+                public async Task<IActionResult> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
                 {
                         var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaRequest);
                         return CreatedAtAction(
@@ -72,7 +71,7 @@ namespace TechStore.Controllers.api
                 [SwaggerResponse(204, "Categoria editada com sucesso.")]
                 [SwaggerResponse(404, "Categoria não encontrada.")]
                 [SwaggerResponse(400, "Erro de validação.")]
-                public async Task<ActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
+                public async Task<IActionResult> AtualizarCategoria(int id, [FromBody] CategoriaRequest categoriaRequest)
                 {
                         await _categoriaService.AtualizarCategoria(id, categoriaRequest);
                         return NoContent();

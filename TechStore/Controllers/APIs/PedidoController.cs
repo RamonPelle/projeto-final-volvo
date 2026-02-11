@@ -103,7 +103,7 @@ namespace TechStore.Controllers.api
         [SwaggerResponse(204, "Pedido deletado com sucesso.")]
         [SwaggerResponse(404, "Pedido não encontrado.")]
         [SwaggerResponse(400, "Erro de validação.")]
-        public async Task<ActionResult> DeletarPedido(int id)
+        public async Task<IActionResult> DeletarPedido(int id)
         {
             await _pedidoService.DeletarPedido(id);
             return NoContent();

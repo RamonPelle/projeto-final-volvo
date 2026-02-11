@@ -60,7 +60,7 @@ namespace TechStore.Controllers.api
         [SwaggerResponse(204, "Cliente deletado com sucesso.")]
         [SwaggerResponse(404, "Cliente não encontrado.")]
         [SwaggerResponse(400, "Erro de validação.")]
-        public async Task<ActionResult> DeletarCliente(int id)
+        public async Task<IActionResult> DeletarCliente(int id)
         {
             await _clienteService.DeletarCliente(id);
             return NoContent();
@@ -71,7 +71,7 @@ namespace TechStore.Controllers.api
         [SwaggerResponse(204, "Cliente editado com sucesso.")]
         [SwaggerResponse(404, "Cliente não encontrado.")]
         [SwaggerResponse(400, "Erro de validação.")]
-        public async Task<ActionResult> AtualizarCliente(int id, [FromBody] ClienteEditarRequest request)
+        public async Task<IActionResult> AtualizarCliente(int id, [FromBody] ClienteEditarRequest request)
         {
             await _clienteService.AtualizarCliente(id, request);
             return NoContent();

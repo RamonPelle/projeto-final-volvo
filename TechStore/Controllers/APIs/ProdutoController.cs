@@ -46,12 +46,22 @@ namespace TechStore.Controllers.api
                         return Ok(produtoResponse);
                 }
 
+                [HttpGet("categoria/{categoriaId:int}")]
+                public async Task<ActionResult<List<ProdutoResponse>>> BuscarProdutosPorCategoria(int categoriaId)
+                {
+                        var produtos = await _produtoService.BuscarProdutosPorCategoria(categoriaId);
+
+                        var produtosResponse = _mapper.Map<List<ProdutoResponse>>(produtos);
+
+                        return Ok(produtosResponse);
+                }
+
                 [HttpDelete("{id:int}")]
                 [SwaggerOperation(Summary = "Deleta produto por ID", Description = "Remove um produto específico pelo seu ID. Regras de negócio: o ID deve ser maior que zero; o produto deve existir.")]
                 [SwaggerResponse(204, "Produto deletado com sucesso.")]
                 [SwaggerResponse(404, "Produto não encontrado.")]
                 [SwaggerResponse(400, "Erro de validação.")]
-                public async Task<ActionResult> DeletarProduto(int id)
+                public async Task<IActionResult> DeletarProduto(int id)
                 {
                         await _produtoService.DeletarProduto(id);
                         return NoContent();
@@ -78,7 +88,7 @@ namespace TechStore.Controllers.api
                 [SwaggerResponse(204, "Produto editado com sucesso.")]
                 [SwaggerResponse(404, "Produto não encontrado.")]
                 [SwaggerResponse(400, "Erro de validação.")]
-                public async Task<ActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
+                public async Task<IActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
                 {
                         await _produtoService.AtualizarProduto(id, produtoRequest);
                         return NoContent();
