@@ -4,24 +4,51 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TechStore.Models
 {
 
-    public partial class Produto
-    {
-        public int Id { get; set; }
+        /// <summary>
+        /// Representa um produto disponível na loja.
+        /// </summary>
+        public partial class Produto
+        {
+                /// <summary>
+                /// Identificador único do produto.
+                /// </summary>
+                /// <example>205</example>
+                public int Id { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        public string Nome { get; set; } = null!;
+                /// <summary>
+                /// Nome do produto.
+                /// </summary>
+                /// <example>Notebook Gamer XPTO</example>
+                [Required]
+                [MaxLength(100)]
+                public string Nome { get; set; } = null!;
 
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Preco { get; set; }
+                /// <summary>
+                /// Preço de venda do produto.
+                /// </summary>
+                /// <example>7999.99</example>
+                [Column(TypeName = "decimal(18,2)")]
+                public decimal Preco { get; set; }
 
-        [Required]
-        [MaxLength(400)]
-        public string Descricao { get; set; } = null!;
+                /// <summary>
+                /// Descrição detalhada do produto.
+                /// </summary>
+                /// <example>Notebook com processador i9, 32GB RAM, SSD 1TB e placa de vídeo RTX 4090.</example>
+                [Required]
+                [MaxLength(400)]
+                public string Descricao { get; set; } = null!;
 
-        [Required]
-        public int Estoque { get; set; }
+                /// <summary>
+                /// Quantidade do produto disponível em estoque.
+                /// </summary>
+                /// <example>50</example>
+                [Required]
+                public int Estoque { get; set; }
 
-        public int CategoriaId { get; set; }
-    }
+                /// <summary>
+                /// ID da categoria à qual o produto pertence.
+                /// </summary>
+                /// <example>1</example>
+                public int CategoriaId { get; set; }
+        }
 }
