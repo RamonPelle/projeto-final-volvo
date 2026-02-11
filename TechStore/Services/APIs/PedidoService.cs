@@ -144,13 +144,10 @@ namespace TechStore.Services.api
             await _pedidoRepository.DeletarPedido(id);
         }
 
-        public async Task FinalizarPedido(int id, PedidoFinalizarRequest pedidoFinalizarRequest)
+        public async Task FinalizarPedido(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Id do pedido inválido.");
-
-            if (pedidoFinalizarRequest == null)
-                throw new ArgumentNullException(nameof(pedidoFinalizarRequest));
 
             using (var transacaoBD = await _pedidoRepository.IniciarTransacao())
             {
@@ -162,7 +159,7 @@ namespace TechStore.Services.api
                 if (pedido.Status == StatusPedido.Concluido)
                     throw new ArgumentException("Pedidos concluídos não podem ser alterados.");
 
-                pedido.Status = pedidoFinalizarRequest.Status;
+                pedido.Status = StatusPedido.Concluido;
 
                 foreach (var item in pedido.Itens)
                 {

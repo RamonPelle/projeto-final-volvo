@@ -72,11 +72,9 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPatch("{id:int}/finalizar")]
-        public async Task<IActionResult> FinalizarPedido(int id,
-            [FromBody] PedidoFinalizarRequest pedidoFinalizarRequest
-        )
+        public async Task<IActionResult> FinalizarPedido(int id)
         {
-            await _pedidoService.FinalizarPedido(id, pedidoFinalizarRequest);
+            await _pedidoService.FinalizarPedido(id);
             return NoContent();
         }
 
