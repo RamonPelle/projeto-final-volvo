@@ -79,7 +79,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeletarPedido(int id)
+        public async Task<IActionResult> DeletarPedido(int id)
         {
             await _pedidoService.DeletarPedido(id);
             return NoContent();
