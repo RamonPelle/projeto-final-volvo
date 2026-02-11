@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using TechStore.Models;
 using TechStore.Services.api;
 using TechStore.Models.DTOs.Request;
 using TechStore.Models.DTOs.Response;
 using TechStore.Models.Enums;
+using AutoMapper;
 
 namespace TechStore.Controllers.api
 {
@@ -12,27 +12,28 @@ namespace TechStore.Controllers.api
     public class PedidoController : ControllerBase
     {
         private readonly PedidoService _pedidoService;
+        private readonly ItemPedidoService _itemPedidoService;
+        private readonly IMapper _mapper;
 
-        public PedidoController(PedidoService pedidoService)
+        public PedidoController(
+            PedidoService pedidoService,
+            ItemPedidoService itemPedidoService,
+            IMapper mapper
+        )
         {
             _pedidoService = pedidoService;
+            _itemPedidoService = itemPedidoService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<PedidoResponse>>> BuscarPedidosPorCliente([FromQuery] int clienteId, [FromQuery] StatusPedido status)
+        public async Task<ActionResult<IEnumerable<PedidoResponse>>> BuscarPedidos(
+            [FromQuery] int? clienteId,
+            [FromQuery] StatusPedido? status
+        )
         {
             var pedidos = await _pedidoService.BuscarTodosOsPedidos(clienteId, status);
-
-            var resposta = pedidos.Select(p => new PedidoResponse
-            {
-                Id = p.Id,
-                Itens = p.Itens.Select(i => new PedidoResponse.ItensResponse
-                {
-                    Id = i.Id,
-                    Quantidade = i.Quantidade,
-                    PrecoUnitario = i.PrecoUnitario
-                }).ToList()
-            });
+            var resposta = _mapper.Map<IEnumerable<PedidoResponse>>(pedidos);
 
             return Ok(resposta);
         }
@@ -45,115 +46,52 @@ namespace TechStore.Controllers.api
             if (pedido is null)
                 return NotFound();
 
-            var resposta = new PedidoResponse
-            {
-                Id = pedido.Id,
-                Itens = pedido.Itens.Select(i => new PedidoResponse.ItensResponse
-                {
-                    Id = i.Id,
-                    Quantidade = i.Quantidade,
-                    PrecoUnitario = i.PrecoUnitario
-                }).ToList()
-            };
+            return Ok(_mapper.Map<PedidoResponse>(pedido));
+        }
 
-            return Ok(resposta);
+        [HttpGet("valor-total-por-categoria")]
+        public async Task<ActionResult<IEnumerable<ValorPorCategoriaResponse>>> ObterValorTotalVendidoPorCategoria()
+        {
+            var resultado = await _pedidoService.ObterValorTotalVendidoPorCategoria();
+            return Ok(resultado);
         }
 
         [HttpPost]
-        public async Task<ActionResult<PedidoResponse>> CriarPedido([FromBody] PedidoRequest pedidoRequest)
+        public async Task<ActionResult<PedidoResponse>> CriarPedido(
+           [FromBody] PedidoRequest pedidoRequest
+        )
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var pedido = await _pedidoService.CriarPedido(pedidoRequest);
+            var response = _mapper.Map<PedidoResponse>(pedido);
 
-            try
-            {
-                var pedido = await _pedidoService.CriarPedido(pedidoRequest);
-
-                var resposta = new PedidoResponse
-                {
-                    Id = pedido.Id,
-                    Itens = pedido.Itens.Select(i => new PedidoResponse.ItensResponse
-                    {
-                        Id = i.Id,
-                        Quantidade = i.Quantidade,
-                        PrecoUnitario = i.PrecoUnitario
-                    }).ToList()
-                };
-
-                return CreatedAtAction(
-                    nameof(BuscarPedidoPorId),
-                    new { id = pedido.Id },
-                    resposta
-                );
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return CreatedAtAction(
+                nameof(BuscarPedidoPorId),
+                new { id = pedido.Id },
+                response
+            );
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditarPedido(int id, [FromBody] PedidoEditarRequest pedidoEditarRequest)
+        [HttpPatch("{id:int}/finalizar")]
+        public async Task<IActionResult> FinalizarPedido(int id,
+            [FromBody] PedidoFinalizarRequest pedidoFinalizarRequest
+        )
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            try
-            {
-                await _pedidoService.EditarPedido(id, pedidoEditarRequest);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _pedidoService.FinalizarPedido(id, pedidoFinalizarRequest);
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeletarPedido(int id)
         {
-            try
-            {
-                await _pedidoService.DeletarPedido(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _pedidoService.DeletarPedido(id);
+            return NoContent();
         }
 
-        [HttpDelete("{id:int}/item/{itemid:int}")]
-        public async Task<ActionResult> DeletarItem(int id, int itemId)
+        [HttpDelete("{id:int}/item/{itemId:int}")]
+        public async Task<IActionResult> DeletarItem(int id, int itemId)
         {
-            try
-            {
-                await _pedidoService.DeletarItem(id, itemId);
-                return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("valorTotalVendidoPorCategoria")]
-        public async Task<ActionResult<IEnumerable<ValorPorCategoriaResponse>>> GetValorTotalVendidoPorCategoria()
-        {
-            var resultado = await _pedidoService.ObterValorTotalVendidoPorCategoria();
-            return Ok(resultado);
+            await _itemPedidoService.DeletarItem(id, itemId);
+            return NoContent();
         }
     }
 }
