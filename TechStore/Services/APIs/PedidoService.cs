@@ -1,8 +1,8 @@
 using TechStore.Models;
 using TechStore.Repository.api;
-using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Request;
 using TechStore.Models.Enums;
-using TechStore.DTOs.Response;
+using TechStore.Models.DTOs.Response;
 
 namespace TechStore.Services.api
 {

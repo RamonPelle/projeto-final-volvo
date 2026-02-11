@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TechStore.DTOs.Request
+namespace TechStore.Models.DTOs.Request
 {
     public class ProdutoRequest
     {

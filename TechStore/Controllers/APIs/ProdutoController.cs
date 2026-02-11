@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TechStore.Models;
 using TechStore.Services.api;
-using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Request;
 
 namespace TechStore.Controllers.api
 {

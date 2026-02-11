@@ -1,5 +1,5 @@
 using AutoMapper;
-using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Request;
 using TechStore.Models;
 
 namespace TechStore.Mappings
