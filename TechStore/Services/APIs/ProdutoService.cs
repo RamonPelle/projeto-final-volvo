@@ -98,5 +98,20 @@ namespace TechStore.Services.api
 
             await _produtoRepository.AtualizarProduto(produto);
         }
+
+        public async Task AtualizarEstoqueProdutos(int id, int quantidade)
+        {
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
+            if (produto == null) throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
+
+            produto.Estoque += quantidade;
+
+            if (produto.Estoque < 0)
+            {
+                throw new InvalidOperationException($"Quantidade solicitada para o produto {produto.Nome} excede o estoque disponível.");
+            }
+
+            await _produtoRepository.AtualizarProduto(produto);
+        }
     }
 }

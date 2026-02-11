@@ -1,8 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TechStore.Models.DTOs.Request;
 using TechStore.Models.DTOs.Response;
 using TechStore.Services.api;
-using TechStore.Models.DTOs.Request;
 
 namespace TechStore.Controllers.api
 {
@@ -59,6 +59,13 @@ namespace TechStore.Controllers.api
         public async Task<ActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
             await _produtoService.AtualizarProduto(id, produtoRequest);
+            return NoContent();
+        }
+
+        [HttpPatch("{id:int}/estoque/{qtd:int}")]
+        public async Task<IActionResult> AtualizarEstoqueProdutos(int id, int qtd)
+        {
+            await _produtoService.AtualizarEstoqueProdutos(id, qtd);
             return NoContent();
         }
     }

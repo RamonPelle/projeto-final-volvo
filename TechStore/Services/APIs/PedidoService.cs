@@ -3,6 +3,7 @@ using TechStore.Repository.api;
 using TechStore.Models.DTOs.Request;
 using TechStore.Models.Enums;
 using TechStore.Models.DTOs.Response;
+using AutoMapper;
 
 namespace TechStore.Services.api
 {
@@ -11,11 +12,17 @@ namespace TechStore.Services.api
         private readonly PedidoRepository _pedidoRepository;
         private readonly ItemPedidoRepository _itemPedidoRepository;
         private readonly ProdutoRepository _produtoRepository;
+        private readonly ClienteRepository _clienteRepository;
+        private readonly ProdutoService _produtoService;
+        private readonly IMapper _mapper;
 
         public PedidoService(
             PedidoRepository pedidoRepository,
             ItemPedidoRepository itemPedidoRepository,
-            ProdutoRepository produtoRepository
+            ProdutoRepository produtoRepository,
+            ClienteRepository clienteRepository,
+            ProdutoService produtoService,
+            IMapper mapper
         )
         {
             _pedidoRepository = pedidoRepository
@@ -26,16 +33,37 @@ namespace TechStore.Services.api
 
             _produtoRepository = produtoRepository
                 ?? throw new ArgumentNullException(nameof(produtoRepository));
+
+            _clienteRepository = clienteRepository ?? throw new ArgumentNullException(nameof(clienteRepository));
+
+            _produtoService = produtoService ?? throw new ArgumentNullException(nameof(produtoService));
+
+            _mapper = mapper
+                ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<List<Pedido>> ObterPedidos(int? clienteId, StatusPedido? status)
+        public async Task<List<Pedido>> BuscarTodosOsPedidos(int? clienteId, StatusPedido? status)
         {
-            return await _pedidoRepository.BuscarTodos(clienteId, status);
+            if (clienteId.HasValue)
+            {
+                var cliente = await _clienteRepository.BuscarClientePorId(clienteId.Value);
+                if (cliente == null)
+                    throw new KeyNotFoundException("Cliente não encontrado.");
+            }
+
+            return await _pedidoRepository.BuscarTodosOsPedidos(clienteId, status);
         }
 
         public async Task<Pedido?> BuscarPedidoPorId(int id)
         {
-            return await _pedidoRepository.BuscarPorId(id);
+            if (id <= 0)
+                throw new ArgumentException("Id do pedido inválido.");
+            var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
+
+            if (pedido == null)
+                throw new KeyNotFoundException("Pedido não encontrado.");
+
+            return pedido;
         }
 
         public async Task<Pedido> CriarPedido(PedidoRequest pedidoRequest)
@@ -49,17 +77,45 @@ namespace TechStore.Services.api
                 );
             }
 
-            var novoPedido = new Pedido
+            if (pedidoRequest.Itens == null || !pedidoRequest.Itens.Any())
+            { throw new ArgumentException("O pedido deve conter pelo menos um item."); }
+
+            if (pedidoRequest.ClienteId <= 0)
+                throw new ArgumentException("Id do cliente inválido.");
+
+            var cliente = await _clienteRepository.BuscarClientePorId(pedidoRequest.ClienteId);
+
+            if (cliente == null)
+                throw new KeyNotFoundException("Cliente não encontrado.");
+
+            var novoPedido = _mapper.Map<Pedido>(pedidoRequest);
+            novoPedido.Data = DateTime.UtcNow;
+            novoPedido.Status = StatusPedido.Pendente;
+            novoPedido.Itens = new List<ItemPedido>();
+
+            foreach (var item in pedidoRequest.Itens)
             {
-                ClienteId = pedidoRequest.ClienteId,
-                Data = DateTime.UtcNow,
-                Status = StatusPedido.Pendente
-            };
+                var produto = await _produtoRepository.BuscarProdutoPorId(item.ProdutoId);
+
+                if (produto == null)
+                    throw new KeyNotFoundException($"Produto com id {item.ProdutoId} não encontrado.");
+
+                if (item.Quantidade <= 0)
+                    throw new ArgumentException("A quantidade deve ser maior que zero.");
+
+                if (item.Quantidade > produto.Estoque)
+                    throw new ArgumentException($"Quantidade solicitada para o produto {produto.Nome} excede o estoque disponível.");
+
+                novoPedido.Itens.Add(new ItemPedido
+                {
+                    ProdutoId = produto.Id,
+                    Quantidade = item.Quantidade,
+                    PrecoUnitario = produto.Preco
+                });
+
+            }
 
             await _pedidoRepository.CriarPedido(novoPedido);
-
-            if (pedidoRequest.Itens != null && pedidoRequest.Itens.Any())
-                await AdicionarItens(novoPedido, pedidoRequest.Itens);
 
             return novoPedido;
         }
@@ -69,48 +125,9 @@ namespace TechStore.Services.api
             return await _pedidoRepository.ObterValorTotalVendidoPorCategoria();
         }
 
-        private async Task AdicionarItens(
-            Pedido pedido,
-            List<ItemPedidoRequest> itens
-        )
-        {
-            foreach (var itemPedidoRequest in itens)
-            {
-                var produto =
-                    await _produtoRepository.BuscarProdutoPorId(itemPedidoRequest.ProdutoId)
-                    ?? throw new ArgumentException(
-                        $"Produto {itemPedidoRequest.ProdutoId} não encontrado."
-                    );
-
-                var itemExistente =
-                    await _itemPedidoRepository.BuscarItem(
-                        pedido.Id,
-                        itemPedidoRequest.ProdutoId
-                    );
-
-                if (itemExistente != null)
-                {
-                    itemExistente.Quantidade += itemPedidoRequest.Quantidade;
-                    await _itemPedidoRepository.AtualizarItem();
-                }
-                else
-                {
-                    var novoItem = new ItemPedido
-                    {
-                        PedidoId = pedido.Id,
-                        ProdutoId = produto.Id,
-                        Quantidade = itemPedidoRequest.Quantidade,
-                        PrecoUnitario = produto.Preco
-                    };
-
-                    await _itemPedidoRepository.AdicionarItem(novoItem);
-                }
-            }
-        }
-
         public async Task DeletarPedido(int id)
         {
-            var pedido = await _pedidoRepository.BuscarPorId(id);
+            var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
 
             if (pedido == null)
                 throw new KeyNotFoundException("Pedido não encontrado.");
@@ -121,43 +138,32 @@ namespace TechStore.Services.api
             await _pedidoRepository.DeletarPedido(id);
         }
 
-        public async Task DeletarItem(int pedidoId, int itemId)
-        {
-            var item = await _itemPedidoRepository.BuscarItemPorId(itemId);
-
-            if (item == null)
-            {
-                return;
-            }
-            if (item.PedidoId == pedidoId)
-            {
-                await _pedidoRepository.DeletarItem(itemId);
-            }
-            else
-            {
-                throw new ArgumentException("Item não pertence ao pedido.");
-            }
-        }
-
-        public async Task EditarPedido(int id, PedidoEditarRequest PedidoEditarDto)
+        public async Task FinalizarPedido(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Id do pedido inválido.");
 
-            if (PedidoEditarDto == null)
-                throw new ArgumentNullException(nameof(PedidoEditarDto));
+            using (var transacaoBD = await _pedidoRepository.IniciarTransacao())
+            {
+                var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
 
-            var pedido = await _pedidoRepository.BuscarPorId(id);
+                if (pedido == null)
+                    throw new KeyNotFoundException("Pedido não encontrado.");
 
-            if (pedido == null)
-                throw new KeyNotFoundException("Pedido não encontrado.");
+                if (pedido.Status == StatusPedido.Concluido)
+                    throw new ArgumentException("Pedidos concluídos não podem ser alterados.");
 
-            if (pedido.Status == StatusPedido.Concluido)
-                throw new ArgumentException("Pedidos concluídos não podem ser alterados.");
+                pedido.Status = StatusPedido.Concluido;
 
-            pedido.Status = PedidoEditarDto.Status;
+                foreach (var item in pedido.Itens)
+                {
+                    await _produtoService.AtualizarEstoqueProdutos(item.ProdutoId, item.Quantidade * -1);
+                }
 
-            await _pedidoRepository.EditarPedido(pedido);
+                await _pedidoRepository.FinalizarPedido(pedido);
+
+                await transacaoBD.CommitAsync();
+            }
         }
     }
 }
