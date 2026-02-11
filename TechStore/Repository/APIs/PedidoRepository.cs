@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using TechStore.Models;
 using TechStore.Models.Enums;
-using TechStore.DTOs.Response;
+using TechStore.Models.DTOs.Response;
 namespace TechStore.Repository.api
 {
     public class PedidoRepository

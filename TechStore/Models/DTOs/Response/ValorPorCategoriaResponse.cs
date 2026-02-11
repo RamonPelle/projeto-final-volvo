@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TechStore.DTOs.Response
+namespace TechStore.Models.DTOs.Response
 {
     public class ValorPorCategoriaResponse
     {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
-using TechStore.DTOs.Request;
+using TechStore.Models.DTOs.Request;
 using TechStore.Models.DTOs.Response;
 using TechStore.Utils;
 using AutoMapper;
@@ -16,10 +16,10 @@ namespace TechStore.Services.api
         public CategoriaService(
             CategoriaRepository categoriaRepository,
             IMapper mapper)
-                {
-                    _categoriaRepository = categoriaRepository;
-                    _mapper = mapper;
-                }
+        {
+            _categoriaRepository = categoriaRepository;
+            _mapper = mapper;
+        }
 
         public async Task<List<CategoriaResponse>> ObterTodasCategorias()
         {
@@ -32,7 +32,7 @@ namespace TechStore.Services.api
             if (id <= 0)
                 throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
 
-            var categoria =  await _categoriaRepository.BuscarCategoriaPorId(id);
+            var categoria = await _categoriaRepository.BuscarCategoriaPorId(id);
 
             if (categoria == null)
                 throw new KeyNotFoundException($"Categoria com id {id} não encontrada.");

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using TechStore.Models.Enums;
 
-namespace TechStore.DTOs.Request
+namespace TechStore.Models.DTOs.Request
 {
     public class PedidoEditarRequest
     {
