@@ -6,8 +6,6 @@ namespace TechStore.Models
 
     public partial class Produto
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
