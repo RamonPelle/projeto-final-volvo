@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
 using TechStore.Utils;
-using TechStore.Models.DTOs.Request;
+using TechStore.DTOs.Request;
 using AutoMapper;
 
 namespace TechStore.Services.api

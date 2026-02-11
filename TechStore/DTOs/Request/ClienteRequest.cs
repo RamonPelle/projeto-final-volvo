@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TechStore.Models.DTOs.Request
+namespace TechStore.DTOs.Request
 {
-    public class ClienteEditarRequest
+    public class ClienteRequest
     {
         [Required]
         [MaxLength(100)]
@@ -12,6 +12,10 @@ namespace TechStore.Models.DTOs.Request
         [EmailAddress]
         [MaxLength(100)]
         public string Email { get; set; } = null!;
+
+        [Required]
+        [MinLength(6)]
+        public string Senha { get; set; } = null!;
 
         [Required]
         [MaxLength(20)]

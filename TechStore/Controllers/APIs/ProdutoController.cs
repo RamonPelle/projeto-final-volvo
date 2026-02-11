@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TechStore.Models.DTOs.Request;
-using TechStore.Models.DTOs.Response;
+using TechStore.DTOs.Request;
+using TechStore.DTOs.Response;
 using TechStore.Services.api;
 
 namespace TechStore.Controllers.api
