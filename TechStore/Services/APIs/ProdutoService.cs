@@ -46,9 +46,13 @@ namespace TechStore.Services.api
             if (categoriaId <= 0)
                 throw new ArgumentException("Id de categoria não pode ser negativo.");
 
+            var categoria = await _categoriaRepository.BuscarCategoriaPorId(categoriaId);
+
+            if (categoria == null)
+                throw new KeyNotFoundException($"Categoria com id {categoriaId} não encontrada.");
+
             return await _produtoRepository.BuscarProdutosPorCategoria(categoriaId);
         }
-
 
         public async Task DeletarProduto(int id)
         {
