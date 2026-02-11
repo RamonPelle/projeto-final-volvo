@@ -35,15 +35,25 @@ namespace TechStore.Controllers.api
             return Ok(produtoResponse);
         }
 
+        [HttpGet("categoria/{categoriaId:int}")]
+        public async Task<ActionResult<List<ProdutoResponse>>> BuscarProdutosPorCategoria(int categoriaId)
+        {
+            var produtos = await _produtoService.BuscarProdutosPorCategoria(categoriaId);
+
+            var produtosResponse = _mapper.Map<List<ProdutoResponse>>(produtos);
+
+            return Ok(produtosResponse);
+        }
+
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeletarProduto(int id)
+        public async Task<IActionResult> DeletarProduto(int id)
         {
             await _produtoService.DeletarProduto(id);
             return NoContent();
         }
 
         [HttpPost]
-        public async Task<ActionResult> AdicionarProduto([FromBody] ProdutoRequest produtoRequest)
+        public async Task<IActionResult> AdicionarProduto([FromBody] ProdutoRequest produtoRequest)
         {
             var produto = await _produtoService.AdicionarProduto(produtoRequest);
             var produtoResponse = _mapper.Map<ProdutoResponse>(produto);
@@ -56,7 +66,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
+        public async Task<IActionResult> AtualizarProduto(int id, [FromBody] ProdutoRequest produtoRequest)
         {
             await _produtoService.AtualizarProduto(id, produtoRequest);
             return NoContent();
