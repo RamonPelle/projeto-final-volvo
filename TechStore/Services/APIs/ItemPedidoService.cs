@@ -1,5 +1,5 @@
 using TechStore.Models;
-using TechStore.Models.DTOs.Request;
+using TechStore.DTOs.Request;
 using TechStore.Repository.api;
 
 namespace TechStore.Services.api

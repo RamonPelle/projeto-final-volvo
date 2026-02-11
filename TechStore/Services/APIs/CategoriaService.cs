@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
 using TechStore.Repository.api;
-using TechStore.Models.DTOs.Request;
-using TechStore.Models.DTOs.Response;
+using TechStore.DTOs.Request;
+using TechStore.DTOs.Response;
 using TechStore.Utils;
 using AutoMapper;
 

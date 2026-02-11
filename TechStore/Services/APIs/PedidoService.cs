@@ -1,8 +1,8 @@
 using TechStore.Models;
 using TechStore.Repository.api;
-using TechStore.Models.DTOs.Request;
 using TechStore.Models.Enums;
-using TechStore.Models.DTOs.Response;
+using TechStore.DTOs.Response;
+using TechStore.DTOs.Request;
 using AutoMapper;
 
 namespace TechStore.Services.api

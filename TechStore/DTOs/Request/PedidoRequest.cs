@@ -1,4 +1,4 @@
-namespace TechStore.Models.DTOs.Request
+namespace TechStore.DTOs.Request
 {
     public class PedidoRequest
     {
