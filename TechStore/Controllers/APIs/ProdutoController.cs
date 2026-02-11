@@ -53,7 +53,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarProduto([FromBody] ProdutoRequest produtoRequest)
+        public async Task<ActionResult> AdicionarProduto([FromBody] ProdutoRequest produtoRequest)
         {
             var produto = await _produtoService.AdicionarProduto(produtoRequest);
             var produtoResponse = _mapper.Map<ProdutoResponse>(produto);
