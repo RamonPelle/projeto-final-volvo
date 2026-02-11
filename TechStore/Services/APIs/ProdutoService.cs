@@ -25,7 +25,7 @@ namespace TechStore.Services.api
 
         public async Task<List<Produto>> ObterTodosProdutos(int skip, int take, string? nome, decimal? precoMin, decimal? precoMax)
         {
-            return await _produtoRepository.BuscarTodos(skip, take, nome, precoMin, precoMax);
+            return await _produtoRepository.BuscarTodosOsProdutos(skip, take, nome, precoMin, precoMax);
         }
 
         public async Task<Produto?> BuscarProdutoPorId(int id)
@@ -33,7 +33,7 @@ namespace TechStore.Services.api
             if (id <= 0)
                 throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
 
-            var produto = await _produtoRepository.BuscarPorId(id);
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
 
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
@@ -46,7 +46,7 @@ namespace TechStore.Services.api
             if (id <= 0)
                 throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
 
-            var produto = await _produtoRepository.BuscarPorId(id);
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
 
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
@@ -56,6 +56,9 @@ namespace TechStore.Services.api
 
         public async Task<Produto> AdicionarProduto(ProdutoRequest produtoRequest)
         {
+            if (produtoRequest == null)
+                throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
+
             var categoria = await _categoriaRepository.BuscarCategoriaPorId(produtoRequest.CategoriaId);
 
             if (categoria == null)
@@ -77,7 +80,7 @@ namespace TechStore.Services.api
             if (produtoRequest == null)
                 throw new ArgumentNullException(nameof(produtoRequest), "O produto não pode ser nulo.");
 
-            var produto = await _produtoRepository.BuscarPorId(id);
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
 
             if (produto == null)
                 throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
