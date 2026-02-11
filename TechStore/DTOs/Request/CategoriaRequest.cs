@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TechStore.Models.DTOs.Request
+namespace TechStore.DTOs.Request
 {
     /// <summary>
     /// DTO para criar ou editar uma categoria.

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TechStore.Models;
-using TechStore.Models.DTOs.Request;
+using TechStore.DTOs.Request;
 using TechStore.Services.api;
 
 namespace TechStore.Controllers.api

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TechStore.Services.api;
-using TechStore.Models.DTOs.Request;
+using TechStore.DTOs.Request;
 using Swashbuckle.AspNetCore.Annotations;
-using TechStore.Models.DTOs.Response;
+using TechStore.DTOs.Response;
 
 namespace TechStore.Controllers.api
 {

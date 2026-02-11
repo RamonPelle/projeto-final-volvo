@@ -1,6 +1,6 @@
 using TechStore.Models.Enums;
 
-namespace TechStore.Models.DTOs.Response
+namespace TechStore.DTOs.Response
 {
     /// <summary>
     /// DTO para a resposta de um pedido.

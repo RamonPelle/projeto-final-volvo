@@ -1,4 +1,4 @@
-namespace TechStore.Models.DTOs.Request
+namespace TechStore.DTOs.Request
 {
     /// <summary>
     /// DTO para representar um item dentro de uma requisição de criação de pedido.

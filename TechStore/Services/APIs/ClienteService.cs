@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using TechStore.Models;
-using TechStore.Models.DTOs.Request;
+using TechStore.DTOs.Request;
 using TechStore.Repository.api;
 using AutoMapper;
 using TechStore.Utils;

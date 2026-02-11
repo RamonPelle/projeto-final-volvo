@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using TechStore.Models;
 using TechStore.Models.Enums;
-using TechStore.Models.DTOs.Response;
+using TechStore.DTOs.Response;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace TechStore.Repository.api
