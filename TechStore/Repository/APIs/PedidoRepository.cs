@@ -3,6 +3,7 @@ using TechStore.Data;
 using TechStore.Models;
 using TechStore.Models.Enums;
 using TechStore.Models.DTOs.Response;
+
 namespace TechStore.Repository.api
 {
     public class PedidoRepository
@@ -60,7 +61,7 @@ namespace TechStore.Repository.api
             await _context.ItensPedido.Where(i => i.Id == id).ExecuteDeleteAsync();
         }
 
-        public async Task EditarPedido(Pedido pedido)
+        public async Task FinalizarPedido(Pedido pedido)
         {
             _context.Pedidos.Update(pedido);
             await _context.SaveChangesAsync();

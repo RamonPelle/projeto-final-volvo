@@ -3,6 +3,7 @@ using TechStore.Repository.api;
 using TechStore.Models.DTOs.Request;
 using TechStore.Models.Enums;
 using TechStore.Models.DTOs.Response;
+using AutoMapper;
 
 namespace TechStore.Services.api
 {
@@ -10,12 +11,16 @@ namespace TechStore.Services.api
     {
         private readonly PedidoRepository _pedidoRepository;
         private readonly ItemPedidoRepository _itemPedidoRepository;
+        private readonly ItemPedidoService _itemPedidoService;
         private readonly ProdutoRepository _produtoRepository;
+
+        private readonly IMapper _mapper;
 
         public PedidoService(
             PedidoRepository pedidoRepository,
             ItemPedidoRepository itemPedidoRepository,
-            ProdutoRepository produtoRepository
+            ProdutoRepository produtoRepository,
+            IMapper mapper
         )
         {
             _pedidoRepository = pedidoRepository
@@ -26,6 +31,9 @@ namespace TechStore.Services.api
 
             _produtoRepository = produtoRepository
                 ?? throw new ArgumentNullException(nameof(produtoRepository));
+
+            _mapper = mapper
+                ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<List<Pedido>> BuscarTodosOsPedidos(int? clienteId, StatusPedido? status)
@@ -49,17 +57,14 @@ namespace TechStore.Services.api
                 );
             }
 
-            var novoPedido = new Pedido
-            {
-                ClienteId = pedidoRequest.ClienteId,
-                Data = DateTime.UtcNow,
-                Status = StatusPedido.Pendente
-            };
+            var novoPedido = _mapper.Map<Pedido>(pedidoRequest);
+            novoPedido.Data = DateTime.UtcNow;
+            novoPedido.Status = StatusPedido.Pendente;
 
             await _pedidoRepository.CriarPedido(novoPedido);
 
             if (pedidoRequest.Itens != null && pedidoRequest.Itens.Any())
-                await AdicionarItens(novoPedido, pedidoRequest.Itens);
+                await _itemPedidoService.AdicionarItens(novoPedido, pedidoRequest.Itens);
 
             return novoPedido;
         }
@@ -121,31 +126,13 @@ namespace TechStore.Services.api
             await _pedidoRepository.DeletarPedido(id);
         }
 
-        public async Task DeletarItem(int pedidoId, int itemId)
-        {
-            var item = await _itemPedidoRepository.BuscarItemPorId(itemId);
-
-            if (item == null)
-            {
-                return;
-            }
-            if (item.PedidoId == pedidoId)
-            {
-                await _pedidoRepository.DeletarItem(itemId);
-            }
-            else
-            {
-                throw new ArgumentException("Item não pertence ao pedido.");
-            }
-        }
-
-        public async Task EditarPedido(int id, PedidoEditarRequest PedidoEditarDto)
+        public async Task FinalizarPedido(int id, PedidoFinalizarRequest pedidoFinalizarRequest)
         {
             if (id <= 0)
                 throw new ArgumentException("Id do pedido inválido.");
 
-            if (PedidoEditarDto == null)
-                throw new ArgumentNullException(nameof(PedidoEditarDto));
+            if (pedidoFinalizarRequest == null)
+                throw new ArgumentNullException(nameof(pedidoFinalizarRequest));
 
             var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
 
@@ -155,9 +142,9 @@ namespace TechStore.Services.api
             if (pedido.Status == StatusPedido.Concluido)
                 throw new ArgumentException("Pedidos concluídos não podem ser alterados.");
 
-            pedido.Status = PedidoEditarDto.Status;
+            pedido.Status = pedidoFinalizarRequest.Status;
 
-            await _pedidoRepository.EditarPedido(pedido);
+            await _pedidoRepository.FinalizarPedido(pedido);
         }
     }
 }
