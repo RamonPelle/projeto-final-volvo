@@ -3,6 +3,7 @@ using TechStore.Data;
 using TechStore.Models;
 using TechStore.Models.Enums;
 using TechStore.Models.DTOs.Response;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace TechStore.Repository.api
 {
@@ -88,6 +89,11 @@ namespace TechStore.Repository.api
                         ValorTotal = resultado.ValorTotal
                     })
                 .ToListAsync();
+        }
+
+        public async Task<IDbContextTransaction> IniciarTransacao()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
     }
 }

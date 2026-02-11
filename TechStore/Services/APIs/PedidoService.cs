@@ -4,6 +4,7 @@ using TechStore.Models.DTOs.Request;
 using TechStore.Models.Enums;
 using TechStore.Models.DTOs.Response;
 using AutoMapper;
+using System.Transactions;
 
 namespace TechStore.Services.api
 {
@@ -82,20 +83,21 @@ namespace TechStore.Services.api
                 );
             }
 
-            var novoPedido = _mapper.Map<Pedido>(pedidoRequest);
-            novoPedido.Data = DateTime.UtcNow;
-            novoPedido.Status = StatusPedido.Pendente;
-            novoPedido.Itens = new List<ItemPedido>();
-            if (novoPedido.ClienteId <= 0)
+            if (pedidoRequest.Itens == null || !pedidoRequest.Itens.Any())
+            { throw new ArgumentException("O pedido deve conter pelo menos um item."); }
+
+            if (pedidoRequest.ClienteId <= 0)
                 throw new ArgumentException("Id do cliente inválido.");
 
-            var cliente = await _clienteRepository.BuscarClientePorId(novoPedido.ClienteId);
+            var cliente = await _clienteRepository.BuscarClientePorId(pedidoRequest.ClienteId);
 
             if (cliente == null)
                 throw new KeyNotFoundException("Cliente não encontrado.");
 
-            if (pedidoRequest.Itens == null || !pedidoRequest.Itens.Any())
-            { throw new ArgumentException("O pedido deve conter pelo menos um item."); }
+            var novoPedido = _mapper.Map<Pedido>(pedidoRequest);
+            novoPedido.Data = DateTime.UtcNow;
+            novoPedido.Status = StatusPedido.Pendente;
+            novoPedido.Itens = new List<ItemPedido>();
 
             foreach (var item in pedidoRequest.Itens)
             {
@@ -117,11 +119,9 @@ namespace TechStore.Services.api
                     PrecoUnitario = produto.Preco
                 });
 
-                await _produtoService.AtualizarEstoqueProdutos(item.ProdutoId, item.Quantidade, false);
             }
 
             await _pedidoRepository.CriarPedido(novoPedido);
-
 
             return novoPedido;
         }
@@ -130,7 +130,6 @@ namespace TechStore.Services.api
         {
             return await _pedidoRepository.ObterValorTotalVendidoPorCategoria();
         }
-
 
         public async Task DeletarPedido(int id)
         {
@@ -153,17 +152,27 @@ namespace TechStore.Services.api
             if (pedidoFinalizarRequest == null)
                 throw new ArgumentNullException(nameof(pedidoFinalizarRequest));
 
-            var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
+            using (var transacaoBD = await _pedidoRepository.IniciarTransacao())
+            {
+                var pedido = await _pedidoRepository.BuscarPedidoPorId(id);
 
-            if (pedido == null)
-                throw new KeyNotFoundException("Pedido não encontrado.");
+                if (pedido == null)
+                    throw new KeyNotFoundException("Pedido não encontrado.");
 
-            if (pedido.Status == StatusPedido.Concluido)
-                throw new ArgumentException("Pedidos concluídos não podem ser alterados.");
+                if (pedido.Status == StatusPedido.Concluido)
+                    throw new ArgumentException("Pedidos concluídos não podem ser alterados.");
 
-            pedido.Status = pedidoFinalizarRequest.Status;
+                pedido.Status = pedidoFinalizarRequest.Status;
 
-            await _pedidoRepository.FinalizarPedido(pedido);
+                foreach (var item in pedido.Itens)
+                {
+                    await _produtoService.AtualizarEstoqueProdutos(item.ProdutoId, item.Quantidade * -1);
+                }
+
+                await _pedidoRepository.FinalizarPedido(pedido);
+
+                await transacaoBD.CommitAsync();
+            }
         }
     }
 }

@@ -64,6 +64,9 @@ namespace TechStore.Services.api
             if (pedidoId <= 0)
                 throw new ArgumentException("Id de pedido não pode ser negativa.");
 
+            if (itemPedidoRequest.Quantidade <= 0)
+                throw new ArgumentException("Quantidade não pode ser negativa.");
+
             if (itemPedidoRequest.ProdutoId <= 0)
                 throw new ArgumentException("Id de produto não pode ser negativa.");
 
