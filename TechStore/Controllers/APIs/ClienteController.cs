@@ -37,7 +37,7 @@ namespace TechStore.Controllers.api
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Retorna todos os clientes", Description = "Obtém a lista completa de clientes cadastrados, sem regras adicionais além da paginação implícita do repositório (se houver).")]
+        [SwaggerOperation(Summary = "Retorna todos os clientes", Description = "Obtém a lista completa de clientes cadastrados")]
         [SwaggerResponse(200, "Lista de clientes retornada com sucesso.", typeof(List<Cliente>))]
         public async Task<ActionResult> BuscarClientes()
         {
