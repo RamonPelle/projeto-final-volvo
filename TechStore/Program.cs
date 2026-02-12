@@ -2,6 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using TechStore.Data;
 using TechStore.Services.api;
 using TechStore.Repository.api;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using System.Diagnostics.Contracts;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 using TechStore.Middlewares;
 using AutoMapper;
 using System.Globalization;
@@ -13,8 +18,31 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers e Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+    options.SwaggerDoc("v1", new global::Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "TechStore API - V1",
+        Version = "v1",
+        Description = "Documentação da primeira versão da API",
+        Contact = new global::Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Ramon & Ana",
+            Email = "ramon.pelle15@gmail.com & ana@email.com"
+        }
+    });
 
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+});
 // DI
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<CategoriaRepository>();
