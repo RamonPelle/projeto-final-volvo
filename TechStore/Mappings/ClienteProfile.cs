@@ -1,6 +1,7 @@
 using AutoMapper;
 using TechStore.Models;
 using TechStore.DTOs.Request;
+using TechStore.DTOs.Response;
 
 namespace TechStore.Mappings
 {
@@ -9,7 +10,7 @@ namespace TechStore.Mappings
         public ClienteProfile()
         {
             CreateMap<ClienteRequest, Cliente>();
-            CreateMap<ClienteEditarRequest, Cliente>();
+            CreateMap<Cliente, ClienteResponse>();
         }
     }
 }
