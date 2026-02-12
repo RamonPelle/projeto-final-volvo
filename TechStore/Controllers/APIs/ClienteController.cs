@@ -28,7 +28,7 @@ namespace TechStore.Controllers.api
 
         [HttpPost]
         [SwaggerOperation(Summary = "Cria novo cliente", Description = "Adiciona um novo cliente ao sistema. Regras de negócio: o corpo da requisição não pode ser nulo; o e-mail informado deve ser único; a senha é armazenada de forma encriptada; a entidade Cliente deve ser válida conforme as regras de validação.")]
-        [SwaggerResponse(201, "Cliente criado com sucesso.", typeof(Cliente))]
+        [SwaggerResponse(201, "Cliente criado com sucesso.", typeof(ClienteResponse))]
         [SwaggerResponse(400, "Erro de validação.")]
         public async Task<ActionResult<ClienteResponse>> AdicionarCliente([FromBody] ClienteRequest clienteRequest)
         {
@@ -43,7 +43,7 @@ namespace TechStore.Controllers.api
 
         [HttpGet]
         [SwaggerOperation(Summary = "Retorna todos os clientes", Description = "Obtém a lista completa de clientes cadastrados")]
-        [SwaggerResponse(200, "Lista de clientes retornada com sucesso.", typeof(List<Cliente>))]
+        [SwaggerResponse(200, "Lista de clientes retornada com sucesso.", typeof(List<ClienteResponse>))]
         public async Task<ActionResult<List<ClienteResponse>>> BuscarClientes()
         {
             var clientes = await _clienteService.ObterTodosClientes();
@@ -53,7 +53,7 @@ namespace TechStore.Controllers.api
 
         [HttpGet("{id:int}")]
         [SwaggerOperation(Summary = "Retorna cliente por ID", Description = "Obtém um cliente específico pelo seu ID. Regras de negócio: se o cliente não existir, é retornado erro de não encontrado.")]
-        [SwaggerResponse(200, "Cliente encontrado.", typeof(Cliente))]
+        [SwaggerResponse(200, "Cliente encontrado.", typeof(ClienteResponse))]
         [SwaggerResponse(404, "Cliente não encontrado.")]
         public async Task<ActionResult<ClienteResponse>> BuscarClientePorId(int id)
         {

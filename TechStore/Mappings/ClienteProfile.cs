@@ -11,6 +11,7 @@ namespace TechStore.Mappings
         {
             CreateMap<ClienteRequest, Cliente>();
             CreateMap<ClientePutRequest, Cliente>();
+            CreateMap<Cliente, ClienteResponse>();
         }
     }
 }
