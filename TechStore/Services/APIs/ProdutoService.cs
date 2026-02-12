@@ -117,9 +117,6 @@ namespace TechStore.Services.api
             if (id <= 0)
                 throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
 
-            if (novoPreco < 0)
-                throw new ValidationException("O preço do produto não pode ser negativo.");
-
             var produto = await _produtoRepository.BuscarProdutoPorId(id);
 
             if (produto == null)
