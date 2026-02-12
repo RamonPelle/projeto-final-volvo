@@ -17,7 +17,6 @@ O objetivo é registrar decisões, padronizar fluxo de trabalho e facilitar a co
   - [Projects e Labels](#projects-e-labels)
 - [Padrões de Código](#padrões-de-código)
 - [Swagger](#swagger)
-- [Ideias / Backlog](#ideias--backlog)
 
 ---
 ## 1. Língua
