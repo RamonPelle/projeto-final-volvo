@@ -58,7 +58,7 @@ Exemplo de título: [Implementação][Categoria] Implementação de endpoints de
 	- Considerações: restrições, escopo, decisões.
 	- Testes: ideias para testes unitários, critérios de aceitação e validação.
 
-Exemplo: 
+Exemplo:
 ```
 [Documentação] Buscar por referências e templates para arquivos de documentação
 
@@ -71,7 +71,7 @@ Objetivo
   - Como estruturar issues e PR (done, documentar)
   - README files
   - Guidelines de desenvolvimento
- 
+
 Considerações
 - Nem tudo que será documentado deve ser mostrado na apresentação
 - filtrar tópicos relevantes para apresentar ou dados que podem ser extraídos dessa documentação
@@ -80,14 +80,14 @@ Considerações
 ### Branches
 -  Abrir diretamente na issue, através do webapp do GitHub.
 -  Evitar abrir branch sem issue vinculada.
-  
+
 ### Commits
 - Regra: Commits curtos, focados em um único assunto.
 - Formato recomendado com tag entre colchetes, seguindo o padrão [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
 - O do commit deve incluir uma ou duas tags. A primeira deve ser uma das tags principais, e a segunda deve ser referente à funcionalidade ou arquivo.
 
 Tags principais: impl, fix, funcionalidade, docs, análise, arq, test, refactor
-  
+
 FAÇA
 ```
 [impl][categoria] endpoints e organizacao de pastas
@@ -131,20 +131,5 @@ TN:
 	- Aplicar SOLID, DRY, TDA, KISS, YAGNIy.
 
 ---
-
-## Swagger
-- Adicionar documentação nos arquivos para descrever:
-	- Sumário, parâmetros, possíveis respostas (2xx, 4xx, 5xx).
-	- Exemplos de request/response.
-- Manter consistência de nomes e descrições; atualizar ao modificar endpoints.
-
----
-
-## Ideias / Backlog
-- Testes unitários – Secundário.
-- Implementar fluxo de venda; considerar requisitos das outras opções.
-- Colocar explicações detalhadas no Swagger (exemplos, responses, erros).
-- GitHub Projects – usar labels customizadas.
-- Internacionalização (i18n) – baixa prioridade.
 
 ```Durante a preparação deste arquivo, os autores usaram GitHub Copilot, no modo Agent GPT-5 para formatar em markdown e sugerir alterações gramaticais no texto. Após usar essa ferramenta, os autores revisaram e editaram o conteúdo conforme necessário e assumem total responsabilidade pelo conteúdo.```
