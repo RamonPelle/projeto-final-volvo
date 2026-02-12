@@ -3,7 +3,6 @@ using TechStore.Data;
 using TechStore.Services.api;
 using TechStore.Repository.api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using System.Diagnostics.Contracts;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -37,12 +36,7 @@ builder.Services.AddSwaggerGen(options =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath);
 });
-builder.Services.AddApiVersioning(options =>
-{
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
-    options.ReportApiVersions = true;
-});
+
 // DI
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<CategoriaRepository>();
