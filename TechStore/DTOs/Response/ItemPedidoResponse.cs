@@ -6,10 +6,15 @@ namespace TechStore.DTOs.Response
         public class ItemPedidoResponse
         {
                 /// <summary>
-                /// ID do produto associado ao item do pedido.
+                /// ID do item de pedido.
                 /// </summary>
                 /// <example>205</example>
                 public int Id { get; set; }
+
+                /// <summary>
+                /// ID do produto associado a este item do pedido.
+                /// </summary>
+                /// <example>10</example>
                 public int ProdutoId { get; set; }
 
                 /// <summary>
