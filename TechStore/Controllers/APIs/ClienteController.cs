@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using TechStore.DTOs.Request;
+using TechStore.DTOs.Response;
 using TechStore.Services.api;
+using AutoMapper;
 
 namespace TechStore.Controllers.api
 {
@@ -9,35 +11,45 @@ namespace TechStore.Controllers.api
     public class ClienteController : ControllerBase
     {
         private readonly ClienteService _clienteService;
+        private readonly IMapper _mapper;
 
-        public ClienteController(ClienteService clienteService)
+        public ClienteController(ClienteService clienteService, IMapper mapper)
         {
             _clienteService = clienteService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ActionResult> AdicionarCliente([FromBody] ClienteRequest clienteRequest)
+        public async Task<ActionResult<ClienteResponse>> AdicionarCliente([FromBody] ClienteRequest clienteRequest)
         {
             var cliente = await _clienteService.AdicionarCliente(clienteRequest);
+            var clienteResponse = _mapper.Map<ClienteResponse>(cliente);
             return CreatedAtAction(
                 nameof(BuscarClientePorId),
-                new { id = cliente.Id },
-                cliente
+                new { id = clienteResponse.Id },
+                clienteResponse
             );
         }
 
         [HttpGet]
-        public async Task<ActionResult> BuscarClientes()
+        public async Task<ActionResult<List<ClienteResponse>>> BuscarClientes()
         {
             var clientes = await _clienteService.ObterTodosClientes();
-            return Ok(clientes);
+            var clientesResponse = _mapper.Map<List<ClienteResponse>>(clientes);
+            return Ok(clientesResponse);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult> BuscarClientePorId(int id)
+        public async Task<ActionResult<ClienteResponse>> BuscarClientePorId(int id)
         {
             var cliente = await _clienteService.BuscarClientePorId(id);
-            return Ok(cliente);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            var clienteResponse = _mapper.Map<ClienteResponse>(cliente);
+            return Ok(clienteResponse);
         }
 
         [HttpDelete("{id:int}")]
