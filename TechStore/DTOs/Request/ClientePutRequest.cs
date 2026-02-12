@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 namespace TechStore.DTOs.Request
 {
     /// <summary>
-    /// DTO para criação de um novo cliente.
+    /// DTO para atualização completa dos dados de um cliente (via PUT).
     /// </summary>
-    public class ClienteRequest
+    public class ClientePutRequest
     {
         /// <summary>
         /// Nome completo do cliente.
@@ -23,14 +23,6 @@ namespace TechStore.DTOs.Request
         [EmailAddress]
         [MaxLength(100)]
         public string Email { get; set; } = null!;
-
-        /// <summary>
-        /// Senha em texto plano que será encriptada no backend.
-        /// </summary>
-        /// <example>minhaSenhaForte123</example>
-        [Required]
-        [MinLength(6)]
-        public string Senha { get; set; } = null!;
 
         /// <summary>
         /// Telefone de contato do cliente.
