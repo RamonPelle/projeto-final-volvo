@@ -71,9 +71,20 @@ namespace TechStore.Controllers.api
         [SwaggerResponse(204, "Cliente editado com sucesso.")]
         [SwaggerResponse(404, "Cliente não encontrado.")]
         [SwaggerResponse(400, "Erro de validação.")]
-        public async Task<IActionResult> AtualizarCliente(int id, [FromBody] ClienteEditarRequest request)
+        public async Task<IActionResult> AtualizarCliente(int id, [FromBody] ClientePutRequest request)
         {
             await _clienteService.AtualizarCliente(id, request);
+            return NoContent();
+        }
+
+        [HttpPatch("{id:int}")]
+        [SwaggerOperation(Summary = "Atualiza parcialmente cliente", Description = "Atualiza parcialmente os dados de um cliente pelo seu ID (nome, e-mail, telefone). Regras de negócio: o corpo da requisição não pode ser nulo; pelo menos um campo deve ser informado; o cliente deve existir; o novo e-mail não pode estar em uso por outro cliente; os dados atualizados devem ser válidos conforme as regras de validação.")]
+        [SwaggerResponse(204, "Cliente atualizado parcialmente com sucesso.")]
+        [SwaggerResponse(404, "Cliente não encontrado.")]
+        [SwaggerResponse(400, "Erro de validação.")]
+        public async Task<IActionResult> AtualizarClienteParcial(int id, [FromBody] ClientePatchRequest request)
+        {
+            await _clienteService.AtualizarClienteParcial(id, request);
             return NoContent();
         }
     }

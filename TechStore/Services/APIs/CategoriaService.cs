@@ -27,7 +27,7 @@ namespace TechStore.Services.api
             return _mapper.Map<List<CategoriaResponse>>(categorias);
         }
 
-        public async Task<Categoria?> BuscarCategoriaPorId(int id)
+        public async Task<CategoriaResponse> BuscarCategoriaPorId(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
@@ -37,7 +37,7 @@ namespace TechStore.Services.api
             if (categoria == null)
                 throw new KeyNotFoundException($"Categoria com id {id} não encontrada.");
 
-            return categoria;
+            return _mapper.Map<CategoriaResponse>(categoria);
         }
 
         public async Task DeletarCategoria(int id)

@@ -112,6 +112,28 @@ namespace TechStore.Services.api
             await _produtoRepository.AtualizarProduto(produto);
         }
 
+        public async Task AtualizarPrecoProduto(int id, decimal novoPreco)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Id deve ser maior que zero.", nameof(id));
+
+            if (novoPreco < 0)
+                throw new ValidationException("O preço do produto não pode ser negativo.");
+
+            var produto = await _produtoRepository.BuscarProdutoPorId(id);
+
+            if (produto == null)
+                throw new KeyNotFoundException($"Produto com id {id} não encontrado.");
+
+            produto.Preco = novoPreco;
+
+            var erros = ValidadorEntidade.Validar(produto);
+            if (erros.Any())
+                throw new ValidationException(string.Join("; ", erros));
+
+            await _produtoRepository.AtualizarProduto(produto);
+        }
+
         public async Task AtualizarEstoqueProdutos(int id, int quantidade)
         {
             var produto = await _produtoRepository.BuscarProdutoPorId(id);

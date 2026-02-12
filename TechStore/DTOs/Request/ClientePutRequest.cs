@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TechStore.DTOs.Request
 {
-    public class ClienteEditarRequest
+    public class ClientePutRequest
     {
         [Required]
         [MaxLength(100)]

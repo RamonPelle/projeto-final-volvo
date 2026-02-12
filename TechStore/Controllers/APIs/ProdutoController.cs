@@ -104,5 +104,16 @@ namespace TechStore.Controllers.api
                         await _produtoService.AtualizarEstoqueProdutos(id, qtd);
                         return NoContent();
                 }
+
+                [HttpPatch("{id:int}/preco")]
+                [SwaggerOperation(Summary = "Atualiza preço do produto", Description = "Atualiza apenas o preço de um produto pelo seu ID. Regras de negócio: o ID deve ser maior que zero; o produto deve existir; o novo preço não pode ser negativo e deve ser válido conforme as regras da entidade.")]
+                [SwaggerResponse(204, "Preço do produto atualizado com sucesso.")]
+                [SwaggerResponse(404, "Produto não encontrado.")]
+                [SwaggerResponse(400, "Erro de validação.")]
+                public async Task<IActionResult> AtualizarPrecoProduto(int id, [FromBody] ProdutoAtualizarPrecoRequest request)
+                {
+                        await _produtoService.AtualizarPrecoProduto(id, request.Preco);
+                        return NoContent();
+                }
         }
 }
