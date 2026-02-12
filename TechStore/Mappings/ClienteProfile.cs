@@ -10,6 +10,7 @@ namespace TechStore.Mappings
         public ClienteProfile()
         {
             CreateMap<ClienteRequest, Cliente>();
+            CreateMap<ClientePutRequest, Cliente>();
             CreateMap<Cliente, ClienteResponse>();
         }
     }

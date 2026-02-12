@@ -54,15 +54,21 @@ namespace TechStore.Controllers.api
 
                 [HttpPost]
                 [SwaggerOperation(Summary = "Cria nova categoria", Description = "Adiciona uma nova categoria ao sistema. Regras de negócio: o corpo da requisição não pode ser nulo e a entidade deve ser válida conforme as anotações de validação.")]
-                [SwaggerResponse(201, "Categoria criada com sucesso.")]
+                [SwaggerResponse(201, "Categoria criada com sucesso.", typeof(CategoriaResponse))]
                 [SwaggerResponse(400, "Erro de validação.")]
-                public async Task<IActionResult> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
+                public async Task<ActionResult<CategoriaResponse>> AdicionarCategoria([FromBody] CategoriaRequest categoriaRequest)
                 {
                         var novaCategoria = await _categoriaService.AdicionarCategoria(categoriaRequest);
+                        var novaCategoriaResponse = new CategoriaResponse
+                        {
+                                Id = novaCategoria.Id,
+                                Nome = novaCategoria.Nome
+                        };
+
                         return CreatedAtAction(
-                            nameof(BuscarCategorias),
-                            new { id = novaCategoria.Id },
-                            novaCategoria
+                            nameof(BuscarCategoriaPorId),
+                            new { id = novaCategoriaResponse.Id },
+                            novaCategoriaResponse
                         );
                 }
 
